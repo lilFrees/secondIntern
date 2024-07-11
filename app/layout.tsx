@@ -19,10 +19,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className + " flex flex-col"}>
+      <body className={inter.className + " flex flex-col bg-gray-100"}>
         <Providers>
           <Navigation />
-          <main className="mx-auto w-full max-w-6xl px-2">{children}</main>
+          <main className="mx-auto w-full max-w-6xl flex-1 px-2">
+            {children}
+          </main>
           <Footer />
         </Providers>
       </body>
