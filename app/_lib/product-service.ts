@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 export async function getProducts() {
   try {
-    const req = await fetch(`${BASE_URL}?limit=20`);
+    const req = await fetch(`${BASE_URL}?limit=12`);
     const data = await req.json();
     return data.products;
   } catch (error) {
@@ -25,11 +25,28 @@ export async function getProductById(id: number) {
 
 export async function getCategoryList() {
   try {
-    const req = await fetch(`${BASE_URL}/category-list`);
+    const req = await fetch(`${BASE_URL}/categories`);
     const data = await req.json();
     return data;
   } catch (error) {
     console.log(error);
     notFound();
   }
+}
+
+export async function getProductsByCategory(category: string) {
+  try {
+    const req = await fetch(`${BASE_URL}/category/${category}`);
+    const data = await req.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+    notFound();
+  }
+}
+
+export async function getCategoryName(cat: string) {
+  const allCategories = await getCategoryList();
+  const name = await allCategories.find((el) => el.slug === cat);
+  return name.name;
 }

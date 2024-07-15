@@ -23,7 +23,7 @@ export default function RootLayout({
         <Providers>
           <Navigation />
           <main className="mx-auto w-full max-w-6xl flex-1 px-2">
-            {children}
+            <div className="min-h-screen">{children}</div>
           </main>
           <Footer />
         </Providers>
