@@ -25,15 +25,15 @@ async function Page({ params }) {
   return (
     <div className="py-5">
       <Breadcrumb separator="/">
-        <BreadcrumbItem className="text-blue-600">
-          <BreadcrumbLink href="#">Home</BreadcrumbLink>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/">Home</BreadcrumbLink>
         </BreadcrumbItem>
 
-        <BreadcrumbItem className="text-blue-600">
+        <BreadcrumbItem>
           <BreadcrumbLink href="/catalog">Catalog</BreadcrumbLink>
         </BreadcrumbItem>
 
-        <BreadcrumbItem className="text-blue-600" isCurrentPage>
+        <BreadcrumbItem isCurrentPage>
           <BreadcrumbLink href={`/catalog/${category}`}>
             {categoryName}
           </BreadcrumbLink>

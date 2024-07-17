@@ -5,8 +5,10 @@ import { IconButton } from "@chakra-ui/react";
 import { TiShoppingCart } from "react-icons/ti";
 import { FaRegHeart } from "react-icons/fa";
 import Link from "next/link";
+import StarRating from "./StarRating";
+import { IProduct } from "@/app/_interfaces/IProduct";
 
-function ProductCard({ prod }) {
+function ProductCard({ prod }: { prod: IProduct }) {
   return (
     <div className="flex flex-col gap-2 rounded-lg border border-slate-300 bg-white p-3">
       <div className="relative h-40 w-full">
@@ -21,11 +23,7 @@ function ProductCard({ prod }) {
         {prod.title}
       </Link>
       <div className="flex items-center gap-2">
-        <FaStar className="text-yellow-300" />
-        <FaStar className="text-yellow-300" />
-        <FaStar className="text-yellow-300" />
-        <FaStar className="text-yellow-300" />
-        <FaStar className="text-yellow-300" />
+        <StarRating rating={prod.rating} />
         <div className="text-xs text-gray-500">
           {prod.reviews.length} {prod.reviews.length > 1 ? "reviews" : "review"}
         </div>

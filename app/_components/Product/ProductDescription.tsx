@@ -1,63 +1,72 @@
-import NumberInput from "../UI/NumberInput";
-import { FaRegHeart, FaStar } from "react-icons/fa";
-import { TiShoppingCart } from "react-icons/ti";
-import { Button, IconButton, Spinner } from "@chakra-ui/react";
-import { FaTruck } from "react-icons/fa6";
-import { HiOutlineSwitchHorizontal } from "react-icons/hi";
+"use client";
+
 import { IProduct } from "@/app/_interfaces/IProduct";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import ReviewItem from "../Reviews/ReviewItem";
+import ReviewList from "../Reviews/ReviewList";
 
 function ProductDescription({ product }: { product: IProduct }) {
+  const [currentPage, setCurrentPage] = useState<0 | 1>(0);
+
   return (
-    <div className="flex flex-col gap-5">
-      <div className="flex items-center gap-2">
-        <FaStar className="text-yellow-400" />
-        <FaStar className="text-yellow-400" />
-        <FaStar className="text-yellow-400" />
-        <FaStar className="text-yellow-400" />
-        <FaStar className="text-yellow-400" />
-        <div>{product.reviews.length} review(s)</div>
+    <div className="col-span-2 mt-10">
+      <div className="flex">
+        <AnimatePresence>
+          <CustomButton
+            isActive={currentPage === 0}
+            onclick={() => setCurrentPage(0)}
+          >
+            Description
+          </CustomButton>
+          <CustomButton
+            onclick={() => setCurrentPage(1)}
+            isActive={currentPage === 1}
+          >
+            Reviews
+          </CustomButton>
+        </AnimatePresence>
       </div>
-      <h1 className="font text-3xl font-semibold">{product.title}</h1>
-      <div className="text-lg">$ {product.price}</div>
-      <NumberInput stock={product.stock} />
-      <div className="flex items-center gap-5">
-        <Button
-          className="font-semibold text-white"
-          colorScheme="green"
-          flexGrow={1}
-          leftIcon={<TiShoppingCart />}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentPage}
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -10, opacity: 0 }}
+          transition={{ duration: 0.2 }}
         >
-          Add to cart
-        </Button>
-        <IconButton
-          aria-label="Add to favorites"
-          variant="ghost"
-          icon={<FaRegHeart />}
-          colorScheme="green"
-        />
-      </div>
-      <div className="flex flex-col gap-5 rounded-md bg-slate-200/75 px-4 py-7">
-        <div className="flex gap-5">
-          <div className="flex gap-5">
-            <FaTruck />
+          <div className="py-5">
+            {currentPage === 0 && product.description}
+            {currentPage === 1 && <ReviewList reviewList={product.reviews} />}
           </div>
-          <div className="flex flex-col gap-2">
-            <div>Delivery</div>
-            <div className="text-sm text-green-500">Free delivery</div>
-            <p className="text-sm">{product.shippingInformation}</p>
-          </div>
-        </div>
-        <div className="h-px w-full bg-slate-300"></div>
-        <div className="flex gap-5">
-          <HiOutlineSwitchHorizontal />
-          <div className="flex flex-col gap-2">
-            <div>Return Policy</div>
-            <p className="text-sm">{product.returnPolicy}</p>
-          </div>
-        </div>
-      </div>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
 
 export default ProductDescription;
+
+function CustomButton({
+  children,
+  isActive,
+  onclick,
+}: {
+  children: any;
+  isActive: boolean;
+  onclick: () => void;
+}) {
+  return (
+    <div className="relative">
+      <button onClick={onclick} className="relative z-10 px-5 py-2">
+        {children}
+      </button>
+      {isActive && (
+        <motion.div
+          className="absolute inset-0 h-full w-full border-b border-b-green-500 bg-slate-200"
+          layoutId="underline"
+        ></motion.div>
+      )}
+    </div>
+  );
+}
