@@ -10,11 +10,18 @@ function ProductImagePicker({ images, title }) {
       <div className="flex flex-col gap-1">
         {images.map((img, i) => (
           <button
-            className="relative h-16 w-16 cursor-pointer border border-slate-300"
+            className="relative h-16 w-16 cursor-pointer overflow-hidden border border-slate-300"
             key={i}
             onClick={() => setCurrentImageIndex(i)}
           >
-            <Image src={img} alt={title} width={200} height={200} quality={1} />
+            <Image
+              src={img}
+              alt={title}
+              width={200}
+              height={200}
+              quality={1}
+              className="block h-full w-full object-contain"
+            />
           </button>
         ))}
       </div>

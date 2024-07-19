@@ -21,13 +21,15 @@ import { FaBars } from "react-icons/fa6";
 import { IoIosClose } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
 import Logo from "../Logo/Logo";
+import { useSearchQuery } from "@/app/_lib/search-query";
 
 function Navigation() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef(null);
+  const { query, updateQuery } = useSearchQuery();
   return (
     <div className="border-b border-slate-300">
-      <div className="mx-auto flex max-w-6xl items-center gap-5 px-2 py-5">
+      <div className="mx-auto flex max-w-7xl items-center gap-5 px-2 py-5">
         <Logo />
         <Button
           ref={btnRef}
@@ -45,6 +47,8 @@ function Navigation() {
             colorScheme="green"
             placeholder="Search products or else"
             borderRadius="8"
+            value={query}
+            onChange={(e) => updateQuery(e.target.value)}
           />
           <InputRightElement>
             <IoSearchSharp />

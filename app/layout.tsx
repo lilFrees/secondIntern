@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={inter.className + " flex flex-col bg-gray-100"}>
         <Providers>
           <Navigation />
-          <main className="mx-auto w-full max-w-6xl flex-1 px-2">
+          <main className="mx-auto w-full max-w-7xl flex-1 px-2">
             <div className="min-h-screen">{children}</div>
           </main>
           <Footer />

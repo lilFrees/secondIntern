@@ -19,7 +19,11 @@ function ProductCard({ prod }: { prod: IProduct }) {
           alt="product thumbnail"
         />
       </div>
-      <Link href={"/" + prod.id} className="font-bold">
+      <Link
+        href={"/products/" + prod.id}
+        className="line-clamp-1 font-bold"
+        title={prod.title}
+      >
         {prod.title}
       </Link>
       <div className="flex items-center gap-2">

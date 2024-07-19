@@ -5,6 +5,8 @@ import {
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
 import descriptions from "@/app/_data/categoryDescriptions.json";
 import { Metadata } from "next";
+import SearchSidebar from "@/app/_components/SearchResults/SearchSidebar";
+import SearchProducts from "@/app/_components/SearchResults/SearchProducts";
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const category = params.catalogBrand;
@@ -42,6 +44,11 @@ async function Page({ params }) {
 
       <h1 className="mt-10 text-3xl font-bold">{categoryName}</h1>
       <p className="mt-5">{description}</p>
+
+      <div className="flex gap-10 py-10">
+        <SearchSidebar />
+        <SearchProducts />
+      </div>
     </div>
   );
 }

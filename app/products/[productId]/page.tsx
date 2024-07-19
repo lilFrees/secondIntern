@@ -5,12 +5,12 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { Suspense } from "react";
-import ProductDescription from "../_components/Product/ProductDescription";
-import ProductImagePicker from "../_components/Product/ProductImagePicker";
-import ProductInfo from "../_components/Product/ProductInfo";
-import { IProduct } from "../_interfaces/IProduct";
-import { getProductById } from "../_lib/product-service";
-import RecommendedList from "../_components/Recommended/RecommendedList";
+import ProductDescription from "../../_components/Product/ProductDescription";
+import ProductImagePicker from "../../_components/Product/ProductImagePicker";
+import ProductInfo from "../../_components/Product/ProductInfo";
+import { IProduct } from "../../_interfaces/IProduct";
+import { getProductById } from "../../_lib/product-service";
+import RecommendedList from "../../_components/Recommended/RecommendedList";
 
 function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -49,7 +49,12 @@ async function Page({ params }) {
           <h3 className="my-10 text-3xl font-semibold">
             Products you might like
           </h3>
-          <RecommendedList category={product.category} />
+          <Suspense fallback={<Spinner colorScheme="green" />}>
+            <RecommendedList
+              category={product.category}
+              currentProductId={product.id}
+            />
+          </Suspense>
         </div>
       </div>
     </div>
