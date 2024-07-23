@@ -1,12 +1,9 @@
-import Image from "next/image";
-import temp from "@/public/logo.png";
-import { FaStar } from "react-icons/fa";
-import { IconButton } from "@chakra-ui/react";
-import { TiShoppingCart } from "react-icons/ti";
-import { FaRegHeart } from "react-icons/fa";
-import Link from "next/link";
-import StarRating from "./StarRating";
 import { IProduct } from "@/app/_interfaces/IProduct";
+import Image from "next/image";
+import Link from "next/link";
+import { FaRegHeart } from "react-icons/fa";
+import { TiShoppingCart } from "react-icons/ti";
+import StarRating from "./StarRating";
 
 function ProductCard({ prod }: { prod: IProduct }) {
   return (
@@ -36,20 +33,19 @@ function ProductCard({ prod }: { prod: IProduct }) {
       <div className="mt-auto flex items-center justify-between">
         <div className="text-lg">$ {prod.price}</div>
         <div className="flex items-center gap-2">
-          <IconButton
+          {/* <IconButton
+            icon={<FaRegHeart />}
             aria-label="Add to Cart"
             variant="ghost"
             colorScheme="green"
-          >
+          ></IconButton> */}
+          {/* Using IconButton is Leading to Hydration errors in this specific component */}
+          <button className="flex size-10 items-center justify-center rounded-lg text-green-700 transition-all duration-200 hover:bg-green-700/10 active:bg-green-700/20">
             <FaRegHeart />
-          </IconButton>
-          <IconButton
-            aria-label="Add to favorites"
-            variant="outline"
-            colorScheme="green"
-          >
+          </button>
+          <button className="flex size-10 items-center justify-center rounded-lg text-green-700 transition-all duration-200 hover:bg-green-700/10 active:bg-green-700/20">
             <TiShoppingCart />
-          </IconButton>
+          </button>
         </div>
       </div>
     </div>

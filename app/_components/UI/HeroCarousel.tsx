@@ -10,6 +10,12 @@ import "swiper/css/pagination";
 import { useRef } from "react";
 import Swiper from "swiper";
 
+import slide1 from "@/public/slider/slide1.jpg";
+import slide2 from "@/public/slider/slide2.jpg";
+import slide3 from "@/public/slider/slide3.webp";
+import slide4 from "@/public/slider/slide4.jpeg";
+import Image from "next/image";
+
 function HeroCarousel() {
   const ref = useRef<Swiper | null>(null);
   const prevRef = useRef(null);
@@ -26,6 +32,8 @@ function HeroCarousel() {
       ref.current.slidePrev();
     }
   }
+
+  const images = [slide1, slide2, slide3, slide4];
 
   return (
     <div className="relative mt-5">
@@ -51,18 +59,21 @@ function HeroCarousel() {
           ref.current = swiper;
         }}
       >
-        <SwiperSlide className="flex h-full w-full items-center justify-center rounded-xl bg-gradient-to-tr from-purple-700 to-purple-400 text-3xl">
-          1
-        </SwiperSlide>
-        <SwiperSlide className="flex h-full w-full items-center justify-center rounded-xl bg-gradient-to-tr from-purple-700 to-purple-400 text-3xl">
-          2
-        </SwiperSlide>
-        <SwiperSlide className="flex h-full w-full items-center justify-center rounded-xl bg-gradient-to-tr from-purple-700 to-purple-400 text-3xl">
-          3
-        </SwiperSlide>
-        <SwiperSlide className="flex h-full w-full items-center justify-center rounded-xl bg-gradient-to-tr from-purple-700 to-purple-400 text-3xl">
-          4
-        </SwiperSlide>
+        {images.map((img, i) => (
+          <SwiperSlide
+            key={i}
+            className="from relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl text-3xl"
+          >
+            <Image
+              src={img}
+              alt={`Product Image ${i}`}
+              fill
+              className="block h-full w-full object-cover"
+              quality={100}
+              placeholder="blur"
+            />
+          </SwiperSlide>
+        ))}
       </SwiperReact>
       <button
         ref={prevRef}

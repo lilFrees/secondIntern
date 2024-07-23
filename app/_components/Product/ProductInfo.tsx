@@ -33,6 +33,12 @@ function ProductInfo({ product }: { product: IProduct }) {
           colorScheme="green"
         />
       </div>
+      {product.brand && (
+        <div className="flex flex-col gap-2 self-start rounded-xl bg-slate-200/75 p-2">
+          <div className="text-xs text-slate-500">Seller</div>
+          <div>{product.brand}</div>
+        </div>
+      )}
       <div className="flex flex-col gap-5 rounded-md bg-slate-200/75 px-4 py-7">
         <div className="flex gap-5">
           <div className="flex gap-5">
