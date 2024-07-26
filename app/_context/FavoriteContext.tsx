@@ -1,17 +1,10 @@
-"use client";
-
-import { ChakraProvider } from "@chakra-ui/react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { getAllFavoriteItems } from "./_lib/shopping-cart";
-import { IProduct } from "./_interfaces/IProduct";
-
-export function DesignProviders({ children }: { children: React.ReactNode }) {
-  return (
-    <FavoritesProvider>
-      <ChakraProvider>{children}</ChakraProvider>
-    </FavoritesProvider>
-  );
-}
+import { IProduct } from "../_interfaces/IProduct";
+import {
+  favoriteChannel,
+  getAllFavoriteItems,
+  updateFavorites,
+} from "../_lib/shopping-cart";
 
 const FavoritesContext = createContext<{
   favorites: IProduct[];
@@ -21,7 +14,7 @@ const FavoritesContext = createContext<{
   fetchFavorites: async () => {},
 });
 
-const FavoritesProvider = ({ children }) => {
+export const FavoritesProvider = ({ children }) => {
   const [favorites, setFavorites] = useState<IProduct[]>([]);
 
   const fetchFavorites = async () => {
@@ -32,10 +25,10 @@ const FavoritesProvider = ({ children }) => {
 
   useEffect(() => {
     fetchFavorites();
-    const broadcastChannel = new BroadcastChannel("favorites-channel");
+    const broadcastChannel = new BroadcastChannel(favoriteChannel);
 
     broadcastChannel.onmessage = (event) => {
-      if (event.data.type === "updateFavorites") {
+      if (event.data.type === updateFavorites) {
         fetchFavorites();
       }
     };

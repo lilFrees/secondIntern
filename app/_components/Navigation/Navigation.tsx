@@ -28,13 +28,19 @@ import { IoSearchSharp } from "react-icons/io5";
 import { TiShoppingCart } from "react-icons/ti";
 import Logo from "../Logo/Logo";
 import { getAllFavoriteItems } from "@/app/_lib/shopping-cart";
+import { useFavorite } from "@/app/_context/FavoriteContext";
+import { useCart } from "@/app/_context/CartContext";
 
 function Navigation() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef(null);
   const { query, updateQuery } = useSearchQuery();
   const [category, setCategory] = useState<any[]>([]);
-  const [favoritesCount, setFavoritesCount] = useState<number>(0);
+  const { favorites } = useFavorite();
+  const { cart } = useCart();
+
+  const favoritesCount = favorites.length;
+  const cartCount = cart.length;
 
   const router = useRouter();
 
@@ -52,26 +58,6 @@ function Navigation() {
     }
 
     getCategories();
-  }, []);
-
-  useEffect(() => {
-    const fetchFavoritesCount = async () => {
-      const favorites = await getAllFavoriteItems();
-      setFavoritesCount(favorites.length);
-    };
-
-    fetchFavoritesCount();
-
-    const broadcastChannel = new BroadcastChannel("favorites-channel");
-    broadcastChannel.onmessage = (event) => {
-      if (event.data.type === "updateFavorites") {
-        fetchFavoritesCount();
-      }
-    };
-
-    return () => {
-      broadcastChannel.close();
-    };
   }, []);
 
   return (
@@ -110,9 +96,11 @@ function Navigation() {
               icon={<TiShoppingCart />}
               variant="ghost"
             />
-            <div className="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-green-600 text-xs text-white">
-              1
-            </div>
+            {cartCount > 0 && (
+              <div className="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-green-600 text-xs text-white">
+                {cartCount}
+              </div>
+            )}
           </Box>
         </Link>
         <Link href="/favorite">
@@ -129,7 +117,7 @@ function Navigation() {
             )}
           </Box>
         </Link>
-        <Button variant="outline" colorScheme="green" ref={btnRef}>
+        <Button colorScheme="green" ref={btnRef}>
           Login
         </Button>
         <Drawer

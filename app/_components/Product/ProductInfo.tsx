@@ -9,16 +9,24 @@ import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 import { IProduct } from "@/app/_interfaces/IProduct";
 import StarRating from "../UI/StarRating";
 import { useCallback, useEffect, useState } from "react";
-import { useFavorite } from "@/app/DesignProviders";
+import { useFavorite } from "@/app/_context/FavoriteContext";
 import {
   addItemToFavorite,
   removeItemFromFavorites,
+  addItemToCart,
+  removeItemFromCart,
 } from "@/app/_lib/shopping-cart";
+import { useCart } from "@/app/_context/CartContext";
 
 function ProductInfo({ product }: { product: IProduct }) {
-  const { favorites, fetchFavorites } = useFavorite();
+  const { favorites } = useFavorite();
+  const { cart } = useCart();
 
   const isFavorite: boolean = favorites.find((value) => value.id === product.id)
+    ? true
+    : false;
+
+  const isInCart: boolean = cart.find((value) => value.item.id === product.id)
     ? true
     : false;
 
@@ -30,7 +38,7 @@ function ProductInfo({ product }: { product: IProduct }) {
       </div>
       <h1 className="font text-3xl font-semibold">{product.title}</h1>
       <div className="text-lg">$ {product.price}</div>
-      <NumberInput stock={product.stock} />
+      <NumberInput max={product.stock} />
       <div className="flex items-center gap-5">
         <Button
           className="font-semibold text-white"

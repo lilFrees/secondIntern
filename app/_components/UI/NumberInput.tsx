@@ -2,7 +2,7 @@
 
 import { Button, Input, useNumberInput } from "@chakra-ui/react";
 
-function NumberInput({ stock }) {
+function NumberInput({ max, quantity }: { max?: number; quantity?: number }) {
   const {
     getDecrementButtonProps,
     getIncrementButtonProps,
@@ -10,14 +10,17 @@ function NumberInput({ stock }) {
     value,
   } = useNumberInput({
     defaultValue: 1,
+    value: quantity,
     min: 1,
-    max: stock,
+    max: max,
     step: 1,
   });
 
   const inc = getIncrementButtonProps();
   const dec = getDecrementButtonProps();
   const inp = getInputProps();
+
+  console.log(inp);
 
   return (
     <div className="flex items-center gap-5">

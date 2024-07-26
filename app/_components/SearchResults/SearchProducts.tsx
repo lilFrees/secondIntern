@@ -48,7 +48,7 @@ function SearchProducts({
   }
 
   return (
-    <div className="grid flex-grow basis-[70%] grid-cols-[repeat(auto-fill,minmax(250px,1fr))] grid-rows-[repeat(auto-fill,320px)] gap-5 py-5">
+    <div className="grid flex-grow basis-[70%] grid-cols-[repeat(auto-fill,minmax(190px,1fr))] grid-rows-[repeat(auto-fill,300px)] gap-5 py-5">
       {products.map((prod, i) => (
         <ProductCard prod={prod} key={i} />
       ))}

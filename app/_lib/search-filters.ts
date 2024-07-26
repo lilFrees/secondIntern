@@ -14,7 +14,7 @@ type Action = {
 };
 
 export const useFilter = create<State & Action>((set) => ({
-  priceRange: [0, 50000],
+  priceRange: [0, 20000],
   brands: [],
   updatePriceRange: (value) => set({ priceRange: value }),
   clearPriceRange: () => set({ priceRange: [0, 10000] }),

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@chakra-ui/react";
-import { useFavorite } from "../DesignProviders";
+import { useFavorite } from "../_context/FavoriteContext";
 import ProductCard from "@/app/_components/UI/ProductCard";
 import { FaRegCircleXmark } from "react-icons/fa6";
 import { clearAllFavorites } from "../_lib/shopping-cart";

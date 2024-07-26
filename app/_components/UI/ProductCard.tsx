@@ -10,15 +10,22 @@ import { TiShoppingCart } from "react-icons/ti";
 import StarRating from "./StarRating";
 import {
   addItemToFavorite,
-  getAllFavoriteItems,
   removeItemFromFavorites,
+  addItemToCart,
+  removeItemFromCart,
 } from "@/app/_lib/shopping-cart";
-import { useFavorite } from "@/app/DesignProviders";
+import { useFavorite } from "@/app/_context/FavoriteContext";
+import { useCart } from "@/app/_context/CartContext";
 
 const ProductCard = memo(function ProductCard({ prod }: { prod: IProduct }) {
   const { favorites } = useFavorite();
+  const { cart } = useCart();
 
   const isFavorite: boolean = favorites.find((value) => value.id === prod.id)
+    ? true
+    : false;
+
+  const isInCart: boolean = cart.find((value) => value.item.id === prod.id)
     ? true
     : false;
 
@@ -65,7 +72,10 @@ const ProductCard = memo(function ProductCard({ prod }: { prod: IProduct }) {
             icon={<TiShoppingCart />}
             aria-label="Add to Cart"
             variant="ghost"
-            colorScheme="green"
+            colorScheme={isInCart ? "red" : "green"}
+            onClick={() => {
+              isInCart ? removeItemFromCart(prod.id) : addItemToCart(prod);
+            }}
           ></IconButton>
         </div>
       </div>

@@ -15,7 +15,7 @@ async function Page({ searchParams }) {
 
       <div className="flex gap-10 py-10">
         <SearchSidebar />
-        <SearchProducts />
+        <SearchProducts searchQuery={searchParams.query} />
       </div>
     </div>
   );
