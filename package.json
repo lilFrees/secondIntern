@@ -16,6 +16,7 @@
     "@supabase/supabase-js": "^2.44.4",
     "formik": "^2.4.6",
     "framer-motion": "^11.3.9",
+    "idb": "^8.0.0",
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",

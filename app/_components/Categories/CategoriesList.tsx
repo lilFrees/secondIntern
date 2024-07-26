@@ -56,7 +56,7 @@ const bgImages = [
 
 async function CategoriesList({ preview }: { preview?: boolean }) {
   const categories = await getCategoryList();
-  const displayContent = preview ? categories.slice(0, 8) : categories;
+  const displayContent = preview ? categories.slice(0, 6) : categories;
 
   return (
     <div className="grid auto-rows-[200px] grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5">

@@ -1,13 +1,27 @@
+"use client";
+
 import NumberInput from "../UI/NumberInput";
-import { FaRegHeart, FaStar } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaStar } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 import { Button, IconButton, Spinner } from "@chakra-ui/react";
 import { FaTruck } from "react-icons/fa6";
 import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 import { IProduct } from "@/app/_interfaces/IProduct";
 import StarRating from "../UI/StarRating";
+import { useCallback, useEffect, useState } from "react";
+import { useFavorite } from "@/app/DesignProviders";
+import {
+  addItemToFavorite,
+  removeItemFromFavorites,
+} from "@/app/_lib/shopping-cart";
 
 function ProductInfo({ product }: { product: IProduct }) {
+  const { favorites, fetchFavorites } = useFavorite();
+
+  const isFavorite: boolean = favorites.find((value) => value.id === product.id)
+    ? true
+    : false;
+
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center gap-2">
@@ -29,8 +43,13 @@ function ProductInfo({ product }: { product: IProduct }) {
         <IconButton
           aria-label="Add to favorites"
           variant="ghost"
-          icon={<FaRegHeart />}
+          icon={isFavorite ? <FaHeart /> : <FaRegHeart />}
           colorScheme="green"
+          onClick={() => {
+            isFavorite
+              ? removeItemFromFavorites(product.id)
+              : addItemToFavorite(product);
+          }}
         />
       </div>
       {product.brand && (

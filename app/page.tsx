@@ -4,6 +4,7 @@ import { Button, Spinner } from "@chakra-ui/react";
 import CategoriesList from "./_components/Categories/CategoriesList";
 import HeroCarousel from "./_components/UI/HeroCarousel";
 import Link from "next/link";
+import { getAllCartItems } from "./_lib/shopping-cart";
 
 export default async function Home() {
   return (

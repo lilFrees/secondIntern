@@ -1,11 +1,27 @@
+"use client";
+
 import { IProduct } from "@/app/_interfaces/IProduct";
+import { IconButton } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { FaRegHeart } from "react-icons/fa";
+import { memo, useCallback, useEffect, useState } from "react";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 import StarRating from "./StarRating";
+import {
+  addItemToFavorite,
+  getAllFavoriteItems,
+  removeItemFromFavorites,
+} from "@/app/_lib/shopping-cart";
+import { useFavorite } from "@/app/DesignProviders";
 
-function ProductCard({ prod }: { prod: IProduct }) {
+const ProductCard = memo(function ProductCard({ prod }: { prod: IProduct }) {
+  const { favorites } = useFavorite();
+
+  const isFavorite: boolean = favorites.find((value) => value.id === prod.id)
+    ? true
+    : false;
+
   return (
     <div className="flex flex-col gap-2 rounded-lg border border-slate-300 bg-white p-3">
       <div className="relative h-40 w-full">
@@ -14,6 +30,7 @@ function ProductCard({ prod }: { prod: IProduct }) {
           fill
           src={prod.thumbnail}
           alt="product thumbnail"
+          sizes="600px"
         />
       </div>
       <Link
@@ -33,23 +50,27 @@ function ProductCard({ prod }: { prod: IProduct }) {
       <div className="mt-auto flex items-center justify-between">
         <div className="text-lg">$ {prod.price}</div>
         <div className="flex items-center gap-2">
-          {/* <IconButton
-            icon={<FaRegHeart />}
+          <IconButton
+            icon={isFavorite ? <FaHeart /> : <FaRegHeart />}
             aria-label="Add to Cart"
             variant="ghost"
             colorScheme="green"
-          ></IconButton> */}
-          {/* Using IconButton is Leading to Hydration errors in this specific component */}
-          <button className="flex size-10 items-center justify-center rounded-lg text-green-700 transition-all duration-200 hover:bg-green-700/10 active:bg-green-700/20">
-            <FaRegHeart />
-          </button>
-          <button className="flex size-10 items-center justify-center rounded-lg text-green-700 transition-all duration-200 hover:bg-green-700/10 active:bg-green-700/20">
-            <TiShoppingCart />
-          </button>
+            onClick={() => {
+              isFavorite
+                ? removeItemFromFavorites(prod.id)
+                : addItemToFavorite(prod);
+            }}
+          ></IconButton>
+          <IconButton
+            icon={<TiShoppingCart />}
+            aria-label="Add to Cart"
+            variant="ghost"
+            colorScheme="green"
+          ></IconButton>
         </div>
       </div>
     </div>
   );
-}
+});
 
 export default ProductCard;

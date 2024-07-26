@@ -16,12 +16,14 @@ function ProductDescription({ product }: { product: IProduct }) {
           <CustomButton
             isActive={currentPage === 0}
             onclick={() => setCurrentPage(0)}
+            key={1}
           >
             Description
           </CustomButton>
           <CustomButton
             onclick={() => setCurrentPage(1)}
             isActive={currentPage === 1}
+            key={2}
           >
             Reviews
           </CustomButton>

@@ -9,7 +9,7 @@ import { FaInstagram } from "react-icons/fa6";
 function Footer() {
   return (
     <div className="mt-auto bg-black/80 text-white">
-      <div className="mx-auto max-w-7xl space-y-10 px-2 py-10">
+      <div className="mx-auto max-w-6xl space-y-10 px-2 py-10">
         <div className="grid w-full grid-cols-5 gap-24">
           <div className="col-span-2 flex flex-col gap-2">
             <p className="text-sm">Any questions for us?</p>
@@ -22,7 +22,7 @@ function Footer() {
                   fill
                   src={google}
                   alt="Play Market"
-                  className="rounded-xl object-contain outline-1 outline-white"
+                  className="h-auto w-auto rounded-xl object-contain outline-1 outline-white"
                 />
               </div>
               <div className="relative h-16 w-full">
@@ -30,7 +30,7 @@ function Footer() {
                   fill
                   src={applestore}
                   alt="App Store"
-                  className="object-contain"
+                  className="h-auto w-auto rounded-xl object-contain outline-1 outline-white"
                 />
               </div>
             </div>

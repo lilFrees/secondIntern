@@ -47,7 +47,7 @@ function HeroCarousel() {
           bulletClass: "custom-bullet",
           bulletActiveClass: "custom-active",
           renderBullet: () =>
-            `<div class="inline-block w-6 h-2 rounded-full mx-2 custom-bullet transition-all duration-300 bg-slate-400 cursor-pointer"></div>`,
+            `<div class="inline-block w-6 h-[6px] rounded-full mx-2 custom-bullet transition-all duration-300 bg-slate-400 cursor-pointer"></div>`,
         }}
         autoplay={{ delay: 2500, disableOnInteraction: true }}
         navigation={{

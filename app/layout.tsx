@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={inter.className + " flex flex-col bg-gray-100"}>
         <DesignProviders>
           <Navigation />
-          <main className="mx-auto w-full max-w-7xl flex-1 px-2 *:min-h-[70vh]">
+          <main className="mx-auto w-full max-w-6xl flex-1 px-2 *:min-h-[70vh]">
             {children}
           </main>
           <Footer />

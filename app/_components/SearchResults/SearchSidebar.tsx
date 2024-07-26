@@ -72,7 +72,7 @@ function SearchSidebar() {
         step={10}
         colorScheme="green"
         size="lg"
-        max={20000}
+        max={50000}
         min={0}
       >
         <RangeSliderTrack>
