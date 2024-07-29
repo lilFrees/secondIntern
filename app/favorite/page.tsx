@@ -1,13 +1,18 @@
 "use client";
 
-import { Button } from "@chakra-ui/react";
-import { useFavorite } from "../_context/FavoriteContext";
 import ProductCard from "@/app/_components/UI/ProductCard";
+import { Button } from "@chakra-ui/react";
 import { FaRegCircleXmark } from "react-icons/fa6";
+import EmptyState from "../_components/UI/EmptyState";
+import { useFavorite } from "../_context/FavoriteContext";
 import { clearAllFavorites } from "../_lib/shopping-cart";
 
 function Page() {
   const { favorites } = useFavorite();
+
+  if (favorites.length === 0) {
+    return <EmptyState text="You have no favorites yet" />;
+  }
 
   return (
     <div className="py-5">

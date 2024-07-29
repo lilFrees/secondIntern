@@ -16,6 +16,7 @@ import {
 } from "@/app/_lib/shopping-cart";
 import { useFavorite } from "@/app/_context/FavoriteContext";
 import { useCart } from "@/app/_context/CartContext";
+import { HiShoppingCart, HiOutlineShoppingCart } from "react-icons/hi2";
 
 const ProductCard = memo(function ProductCard({ prod }: { prod: IProduct }) {
   const { favorites } = useFavorite();
@@ -69,10 +70,10 @@ const ProductCard = memo(function ProductCard({ prod }: { prod: IProduct }) {
             }}
           ></IconButton>
           <IconButton
-            icon={<TiShoppingCart />}
+            icon={isInCart ? <HiShoppingCart /> : <HiOutlineShoppingCart />}
             aria-label="Add to Cart"
             variant="ghost"
-            colorScheme={isInCart ? "red" : "green"}
+            colorScheme="green"
             onClick={() => {
               isInCart ? removeItemFromCart(prod.id) : addItemToCart(prod);
             }}

@@ -1,9 +1,18 @@
+/**
+ * Base URL for the product API.
+ */
 const BASE_URL = "https://dummyjson.com/products";
+
 import { notFound } from "next/navigation";
 import { supabase } from "./supabase";
 import { IProduct } from "../_interfaces/IProduct";
 
-export async function getProducts() {
+/**
+ * Retrieves all products from the database.
+ * @returns A promise that resolves to an array of products.
+ * @throws If there is an error fetching the products.
+ */
+export async function getProducts(): Promise<IProduct[]> {
   try {
     const { data, error } = await supabase
       .from("products")
@@ -18,6 +27,9 @@ export async function getProducts() {
   }
 }
 
+/**
+ * Options for filtering products.
+ */
 interface FilterOptions {
   priceRange?: [number, number]; // [min, max]
   brands?: string[];
@@ -25,6 +37,12 @@ interface FilterOptions {
   category?: string;
 }
 
+/**
+ * Retrieves filtered products based on the provided filter options.
+ * @param filterOptions - The filter options to apply.
+ * @returns A promise that resolves to an array of filtered products.
+ * @throws If there is an error fetching the filtered products.
+ */
 export async function fetchFilteredProducts(
   filterOptions: FilterOptions = {},
 ): Promise<IProduct[]> {
@@ -64,7 +82,13 @@ export async function fetchFilteredProducts(
   return data as IProduct[];
 }
 
-export async function getProductById(id: number) {
+/**
+ * Retrieves a product by its ID.
+ * @param id - The ID of the product to retrieve.
+ * @returns A promise that resolves to the product with the specified ID.
+ * @throws If there is an error fetching the product.
+ */
+export async function getProductById(id: number): Promise<IProduct> {
   try {
     const { data, error } = await supabase
       .from("products")
@@ -80,7 +104,12 @@ export async function getProductById(id: number) {
   }
 }
 
-export async function getCategoryList() {
+/**
+ * Retrieves the list of categories.
+ * @returns A promise that resolves to the list of categories.
+ * @throws If there is an error fetching the categories.
+ */
+export async function getCategoryList(): Promise<any> {
   try {
     const req = await fetch(`${BASE_URL}/categories`);
     const data = await req.json();
@@ -91,13 +120,19 @@ export async function getCategoryList() {
   }
 }
 
-export async function getProductsByBrands(brands) {
-  // Ensure brands is an array
+/**
+ * Retrieves products by brands.
+ * @param brands - The brands to filter by.
+ * @returns A promise that resolves to an array of products matching the specified brands.
+ * @throws If there is an error fetching the products.
+ */
+export async function getProductsByBrands(
+  brands: string[],
+): Promise<IProduct[]> {
   if (!Array.isArray(brands)) {
     throw new Error("brands must be an array");
   }
 
-  // If brands array is empty, return an empty array
   if (brands.length === 0) {
     return [];
   }
@@ -119,7 +154,13 @@ export async function getProductsByBrands(brands) {
   }
 }
 
-export async function getProductsByCategory(category: string) {
+/**
+ * Retrieves products by category.
+ * @param category - The category to filter by.
+ * @returns A promise that resolves to an array of products matching the specified category.
+ * @throws If there is an error fetching the products.
+ */
+export async function getProductsByCategory(category: string): Promise<any> {
   try {
     const req = await fetch(`${BASE_URL}/category/${category}`);
     const data = await req.json();
@@ -130,13 +171,26 @@ export async function getProductsByCategory(category: string) {
   }
 }
 
-export async function getCategoryName(cat: string) {
+/**
+ * Retrieves the name of a category.
+ * @param cat - The category slug.
+ * @returns A promise that resolves to the name of the category.
+ */
+export async function getCategoryName(cat: string): Promise<string> {
   const allCategories = await getCategoryList();
   const name = await allCategories.find((el) => el.slug === cat);
   return name.name;
 }
 
-export async function getRecommendedByCategory(category: string) {
+/**
+ * Retrieves recommended products by category.
+ * @param category - The category to filter by.
+ * @returns A promise that resolves to an array of recommended products.
+ * @throws If there is an error fetching the recommended products.
+ */
+export async function getRecommendedByCategory(
+  category: string,
+): Promise<IProduct[]> {
   try {
     const req = await fetch(`${BASE_URL}/category/${category}?limit=40`);
     const data = await req.json();

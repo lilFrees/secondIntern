@@ -45,6 +45,9 @@ function ProductInfo({ product }: { product: IProduct }) {
           colorScheme="green"
           flexGrow={1}
           leftIcon={<TiShoppingCart />}
+          onClick={() => {
+            addItemToCart(product);
+          }}
         >
           Add to cart
         </Button>

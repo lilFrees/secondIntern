@@ -24,15 +24,16 @@ function CartItem({ cartItem: { item } }: { cartItem: ICartItem }) {
         </div>
         <div className="flex items-center gap-5">
           <div className="text-lg text-slate-500">Brand:</div>
-          <div className="text-lg">${item.brand}</div>
+          <div className="text-lg">{item.brand || "Green Haven"}</div>
         </div>
         <div className="flex justify-between">
           <NumberInput max={item.stock} />
           <Button
-            colorScheme="red"
+            colorScheme="green"
             variant="ghost"
             leftIcon={<FaRegTrashAlt />}
             onClick={() => removeItemFromCart(item.id)}
+            size="sm"
           >
             Remove
           </Button>

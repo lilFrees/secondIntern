@@ -27,9 +27,9 @@ import { IoIosClose } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
 import { TiShoppingCart } from "react-icons/ti";
 import Logo from "../Logo/Logo";
-import { getAllFavoriteItems } from "@/app/_lib/shopping-cart";
 import { useFavorite } from "@/app/_context/FavoriteContext";
 import { useCart } from "@/app/_context/CartContext";
+import { HiShoppingCart, HiOutlineShoppingCart } from "react-icons/hi2";
 
 function Navigation() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -93,7 +93,7 @@ function Navigation() {
           <Box className="relative inline-block">
             <IconButton
               aria-label="Cart Button"
-              icon={<TiShoppingCart />}
+              icon={<HiOutlineShoppingCart />}
               variant="ghost"
             />
             {cartCount > 0 && (
