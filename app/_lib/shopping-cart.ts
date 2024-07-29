@@ -14,24 +14,31 @@ export const favoriteChannel = "favorites-channel";
 export const updateFavorites = "updateFavorites";
 export const updateCart = "updateCart";
 
-const broadcastFavoriteChannel = new BroadcastChannel(favoriteChannel);
-const broadcastCartChannel = new BroadcastChannel(cartChannel);
+const broadcastFavoriteChannel =
+  typeof window !== "undefined" ? new BroadcastChannel(favoriteChannel) : null;
 
-const dbPromise = openDB(storeName, 1, {
-  upgrade(db) {
-    if (!db.objectStoreNames.contains(FavoriteStore)) {
-      db.createObjectStore(FavoriteStore, {
-        keyPath: "id",
-        autoIncrement: true,
-      });
-    }
-    if (!db.objectStoreNames.contains(CartStore)) {
-      const store = db.createObjectStore(CartStore, {
-        keyPath: "item.id",
-      });
-    }
-  },
-});
+const broadcastCartChannel =
+  typeof window !== "undefined" ? new BroadcastChannel(cartChannel) : null;
+
+let dbPromise;
+
+if (typeof window !== "undefined") {
+  dbPromise = openDB(storeName, 1, {
+    upgrade(db) {
+      if (!db.objectStoreNames.contains(FavoriteStore)) {
+        db.createObjectStore(FavoriteStore, {
+          keyPath: "id",
+          autoIncrement: true,
+        });
+      }
+      if (!db.objectStoreNames.contains(CartStore)) {
+        const store = db.createObjectStore(CartStore, {
+          keyPath: "item.id",
+        });
+      }
+    },
+  });
+}
 
 export async function getAllCartItems(): Promise<ICartItem[]> {
   const db = await dbPromise;
@@ -52,7 +59,7 @@ export async function addItemToCart(item: IProduct, quantity: number = 1) {
     await store.add({ item, quantity });
   }
 
-  broadcastCartChannel.postMessage({ type: updateCart });
+  broadcastCartChannel!.postMessage({ type: updateCart });
   await tx.done;
 }
 
@@ -60,7 +67,7 @@ export async function removeItemFromCart(id: number) {
   const db = await dbPromise;
   const tx = db.transaction(CartStore, "readwrite");
   await tx.objectStore(CartStore).delete(id);
-  broadcastCartChannel.postMessage({ type: updateCart });
+  broadcastCartChannel!.postMessage({ type: updateCart });
   db.delete(CartStore, id);
   await tx.done;
 }
@@ -77,13 +84,13 @@ export async function updateItemInCart(item: IProduct, newQuantity: number) {
   } else {
     await store.add({ item, quantity: newQuantity });
   }
-  broadcastCartChannel.postMessage({ type: updateCart });
+  broadcastCartChannel!.postMessage({ type: updateCart });
   await tx.done;
 }
 
 export async function clearCart() {
   const db = await dbPromise;
-  broadcastCartChannel.postMessage({ type: updateCart });
+  broadcastCartChannel!.postMessage({ type: updateCart });
   db.clear(CartStore);
 }
 
@@ -95,17 +102,17 @@ export async function getAllFavoriteItems(): Promise<IProduct[]> {
 export async function addItemToFavorite(item: IProduct) {
   const db = await dbPromise;
   db.add(FavoriteStore, item);
-  broadcastFavoriteChannel.postMessage({ type: updateFavorites });
+  broadcastFavoriteChannel!.postMessage({ type: updateFavorites });
 }
 
 export async function removeItemFromFavorites(id: number) {
   const db = await dbPromise;
   db.delete(FavoriteStore, id);
-  broadcastFavoriteChannel.postMessage({ type: updateFavorites });
+  broadcastFavoriteChannel!.postMessage({ type: updateFavorites });
 }
 
 export async function clearAllFavorites() {
   const db = await dbPromise;
   db.clear(FavoriteStore);
-  broadcastFavoriteChannel.postMessage({ type: updateFavorites });
+  broadcastFavoriteChannel!.postMessage({ type: updateFavorites });
 }

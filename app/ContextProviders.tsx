@@ -1,5 +1,3 @@
-"use client";
-
 import { ChakraProvider } from "@chakra-ui/react";
 import { FavoritesProvider } from "./_context/FavoriteContext";
 import { CartProvider } from "./_context/CartContext";
