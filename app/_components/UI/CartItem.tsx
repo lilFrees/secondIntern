@@ -1,11 +1,21 @@
+"use client";
+
 import { ICartItem } from "@/app/_interfaces/ICartItem";
 import { Button, Checkbox } from "@chakra-ui/react";
 import Image from "next/image";
 import NumberInput from "./NumberInput";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { removeItemFromCart } from "@/app/_lib/shopping-cart";
+import Link from "next/link";
+import { useState } from "react";
 
 function CartItem({ cartItem: { item } }: { cartItem: ICartItem }) {
+  const [quantity, setQuantity] = useState<number>(1);
+
+  function updateQuantity(value: number) {
+    setQuantity(value);
+  }
+
   return (
     <div className="flex gap-5 border-b border-slate-300 py-5">
       <div className="relative flex-shrink-0 basis-[72px]">
@@ -17,7 +27,9 @@ function CartItem({ cartItem: { item } }: { cartItem: ICartItem }) {
         />
       </div>
       <div className="flex flex-grow flex-col gap-5">
-        <h3 className="text-xl font-semibold">{item.title}</h3>
+        <Link href={`products/${item.id}`} className="text-xl font-semibold">
+          {item.title}
+        </Link>
         <div className="flex items-center gap-5">
           <div className="text-lg text-slate-500">Price:</div>
           <div className="text-lg">${item.price}</div>
@@ -27,7 +39,11 @@ function CartItem({ cartItem: { item } }: { cartItem: ICartItem }) {
           <div className="text-lg">{item.brand || "Green Haven"}</div>
         </div>
         <div className="flex justify-between">
-          <NumberInput max={item.stock} />
+          <NumberInput
+            quantity={quantity}
+            onChange={updateQuantity}
+            max={item.stock}
+          />
           <Button
             colorScheme="green"
             variant="ghost"

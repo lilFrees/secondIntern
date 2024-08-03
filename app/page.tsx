@@ -1,10 +1,9 @@
-import { Suspense } from "react";
-import ProductList from "./_components/Product/ProductList";
 import { Button, Spinner } from "@chakra-ui/react";
-import CategoriesList from "./_components/Categories/CategoriesList";
-import HeroCarousel from "./_components/UI/HeroCarousel";
 import Link from "next/link";
-import { getAllCartItems } from "./_lib/shopping-cart";
+import { Suspense } from "react";
+import CategoriesList from "./_components/Categories/CategoriesList";
+import ProductList from "./_components/Product/ProductList";
+import HeroCarousel from "./_components/UI/HeroCarousel";
 
 export default async function Home() {
   return (

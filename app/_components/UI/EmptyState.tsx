@@ -15,7 +15,7 @@ function EmptyState({ text }: { text: string }) {
         />
       </div>
       <div className="py-5 text-lg text-gray-500">{text}</div>
-      <Link href="/products">
+      <Link href="/">
         <Button colorScheme="green">Shop now</Button>
       </Link>
     </div>

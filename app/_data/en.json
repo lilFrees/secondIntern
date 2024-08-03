@@ -1,0 +1,4 @@
+{
+  "my translated text": "My translated text",
+  "my translated text with variable": "My translated text with variable: {{variable}}"
+}

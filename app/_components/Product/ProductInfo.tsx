@@ -1,26 +1,31 @@
 "use client";
 
-import NumberInput from "../UI/NumberInput";
-import { FaHeart, FaRegHeart, FaStar } from "react-icons/fa";
-import { TiShoppingCart } from "react-icons/ti";
-import { Button, IconButton, Spinner } from "@chakra-ui/react";
-import { FaTruck } from "react-icons/fa6";
-import { HiOutlineSwitchHorizontal } from "react-icons/hi";
-import { IProduct } from "@/app/_interfaces/IProduct";
-import StarRating from "../UI/StarRating";
-import { useCallback, useEffect, useState } from "react";
+import { useCart } from "@/app/_context/CartContext";
 import { useFavorite } from "@/app/_context/FavoriteContext";
+import { IProduct } from "@/app/_interfaces/IProduct";
 import {
+  addItemToCart,
   addItemToFavorite,
   removeItemFromFavorites,
-  addItemToCart,
-  removeItemFromCart,
 } from "@/app/_lib/shopping-cart";
-import { useCart } from "@/app/_context/CartContext";
+import { Button, IconButton } from "@chakra-ui/react";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { FaTruck } from "react-icons/fa6";
+import { HiOutlineSwitchHorizontal } from "react-icons/hi";
+import { TiShoppingCart } from "react-icons/ti";
+import NumberInput from "../UI/NumberInput";
+import StarRating from "../UI/StarRating";
+import { useState } from "react";
 
 function ProductInfo({ product }: { product: IProduct }) {
   const { favorites } = useFavorite();
   const { cart } = useCart();
+
+  const [quantity, setQuantity] = useState<number>(1);
+
+  function handleQuantityChange(value: number) {
+    setQuantity(value);
+  }
 
   const isFavorite: boolean = favorites.find((value) => value.id === product.id)
     ? true
@@ -38,7 +43,11 @@ function ProductInfo({ product }: { product: IProduct }) {
       </div>
       <h1 className="font text-3xl font-semibold">{product.title}</h1>
       <div className="text-lg">$ {product.price}</div>
-      <NumberInput max={product.stock} />
+      <NumberInput
+        quantity={quantity}
+        max={product.stock}
+        onChange={handleQuantityChange}
+      />
       <div className="flex items-center gap-5">
         <Button
           className="font-semibold text-white"
@@ -46,7 +55,7 @@ function ProductInfo({ product }: { product: IProduct }) {
           flexGrow={1}
           leftIcon={<TiShoppingCart />}
           onClick={() => {
-            addItemToCart(product);
+            addItemToCart(product, quantity);
           }}
         >
           Add to cart
