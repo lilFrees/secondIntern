@@ -1,13 +1,13 @@
 "use client";
 
-import { Button, Input } from "@chakra-ui/react";
+import { Button, Input, Spinner } from "@chakra-ui/react";
 import { useState } from "react";
 
 import googleIcon from "@/public/google-icon.webp";
 
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [email, setEmail] = useState("");
@@ -64,7 +64,7 @@ const Page = () => {
         onSubmit={submitCredHandler}
       >
         <h2 className="mb-4 text-center text-2xl font-bold">
-          Login to your account
+          Create an Account
         </h2>
         <div className="mb-4">
           <label
@@ -98,12 +98,12 @@ const Page = () => {
         </div>
         {error && <div className="text-sm text-red-500">{error}</div>}
         <Button colorScheme="green" type="submit" className="w-full">
-          Login
+          Sign Up Now
         </Button>
 
         <div className="flex w-full items-center gap-2">
           <div className="my-7 h-px flex-grow bg-slate-300" />
-          <p className="w-max text-xs text-slate-500">Or Login With</p>
+          <p className="w-max text-xs text-slate-500">Or Sign Up With</p>
           <div className="my-7 h-px flex-grow bg-slate-300" />
         </div>
 
@@ -120,11 +120,11 @@ const Page = () => {
           Google
         </Button>
         <div className="mb-2 mt-5 text-center text-xs text-slate-500">
-          Don't have an account yet?
+          Already have an account?
         </div>
-        <Link href="/register">
+        <Link href="/login">
           <Button variant="ghost" className="w-full" colorScheme="green">
-            Create an account
+            Login now
           </Button>
         </Link>
       </form>

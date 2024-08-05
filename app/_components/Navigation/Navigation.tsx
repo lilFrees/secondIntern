@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "@/app/_context/CartContext";
+import { useSession } from "next-auth/react";
 import { useFavorite } from "@/app/_context/FavoriteContext";
 import { getCategoryList } from "@/app/_lib/product-service";
 import { useSearchQuery } from "@/app/_lib/search-query";
@@ -30,12 +31,49 @@ import { IoIosClose } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
 import Logo from "../Logo/Logo";
 
+async function fetchCategories() {
+  const data = await getCategoryList();
+  return data;
+}
+
 function Navigation() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef(null);
   const { query, updateQuery } = useSearchQuery();
   const { favorites } = useFavorite();
   const { cart } = useCart();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [category, setCategory] = useState<any[]>([]);
+  const { data, status } = useSession();
+
+  let AccountButton;
+
+  if (status === "authenticated") {
+    AccountButton = (
+      <Link href="/account">
+        <Button colorScheme="green">Profile</Button>
+      </Link>
+    );
+  } else if (status === "unauthenticated") {
+    AccountButton = (
+      <Link href="/login">
+        <Button colorScheme="green" variant="ghost">
+          Login
+        </Button>
+      </Link>
+    );
+  } else {
+    AccountButton = (
+      <Button colorScheme="green" variant="ghost">
+        <Spinner colorScheme="green" />
+      </Button>
+    );
+  }
+
+  useEffect(() => {
+    fetchCategories().then((data) => setCategory(data));
+    console.log(data);
+  }, [data]);
 
   const favoritesCount = favorites.length;
   const cartCount = cart.length;
@@ -106,11 +144,8 @@ function Navigation() {
             )}
           </Box>
         </Link>
-        <Link href="/login">
-          <Button colorScheme="green" ref={btnRef}>
-            Login
-          </Button>
-        </Link>
+        {/* ACCOUNT BUTTON */}
+        {AccountButton}
         <Drawer
           isOpen={isOpen}
           onClose={onClose}
@@ -124,9 +159,15 @@ function Navigation() {
             <DrawerCloseButton />
             <DrawerHeader>Catalog</DrawerHeader>
             <DrawerBody className="flex flex-col gap-2">
-              <Suspense fallback={<Spinner />}>
-                <Categories closeHandler={onClose} />
-              </Suspense>
+              {category.map((cat, i) => (
+                <Link
+                  href={`/catalog/${cat.slug}`}
+                  key={i}
+                  onClick={() => setTimeout(onClose, 500)}
+                >
+                  {cat.name}
+                </Link>
+              ))}
             </DrawerBody>
           </DrawerContent>
         </Drawer>
@@ -136,30 +177,3 @@ function Navigation() {
 }
 
 export default Navigation;
-
-async function Categories({ closeHandler }: { closeHandler: () => void }) {
-  const [category, setCategory] = useState<any[]>([]);
-
-  useEffect(() => {
-    async function getCategories() {
-      const categories = await getCategoryList();
-      setCategory(categories);
-    }
-
-    getCategories();
-  }, []);
-
-  return (
-    <>
-      {category.map((cat, i) => (
-        <Link
-          href={`/catalog/${cat.slug}`}
-          key={i}
-          onClick={() => setTimeout(closeHandler, 500)}
-        >
-          {cat.name}
-        </Link>
-      ))}
-    </>
-  );
-}
