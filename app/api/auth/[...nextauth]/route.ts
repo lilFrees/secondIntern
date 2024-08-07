@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { supabase } from "@/app/_lib/supabase";
+import { redirect } from "next/navigation";
 
 const authConfig = {
   providers: [
@@ -10,25 +11,17 @@ const authConfig = {
       credentials: {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
+        action: { label: "Action", type: "text" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        const email = credentials?.email as string;
+        const password = credentials?.password as string;
 
-        const email = credentials.email as string;
-        const password = credentials.password as string;
+        if (!email || !email) return null;
 
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-        console.log(data, error);
-
-        if (error) {
-          return null;
-        }
-
-        return data.user;
+        // We'll use this provider just for session management, not actual auth
+        const user = { id: email, email };
+        return user;
       },
     }),
     GoogleProvider({

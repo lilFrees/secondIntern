@@ -5,7 +5,14 @@ import { signOut } from "next-auth/react";
 
 function LogoutButton() {
   return (
-    <Button colorScheme="green" onClick={() => signOut()}>
+    <Button
+      colorScheme="green"
+      onClick={async () =>
+        await signOut({
+          callbackUrl: "/login",
+        })
+      }
+    >
       Logout
     </Button>
   );

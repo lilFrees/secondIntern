@@ -7,6 +7,7 @@ import {
   getAllFavoriteItems,
   updateFavorites,
 } from "../_lib/shopping-cart";
+import { useAuthSync } from "../_hooks/useAuthSync";
 
 const FavoritesContext = createContext<{
   favorites: IProduct[];
@@ -17,6 +18,8 @@ const FavoritesContext = createContext<{
 });
 
 export const FavoritesProvider = ({ children }) => {
+  useAuthSync();
+
   const [favorites, setFavorites] = useState<IProduct[]>([]);
 
   const fetchFavorites = async () => {
