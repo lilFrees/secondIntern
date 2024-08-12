@@ -79,6 +79,7 @@ function CategoryCard({ cat, image }) {
         src={image}
         alt="Beauty products"
         placeholder="blur"
+        sizes="(max-width: 768px) 50vw, 25vw"
         className="absolute z-20 object-cover transition-all duration-300 hover:scale-110"
         fill
       />

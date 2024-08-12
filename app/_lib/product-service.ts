@@ -12,12 +12,12 @@ import { IProduct } from "../_interfaces/IProduct";
  * @returns A promise that resolves to an array of products.
  * @throws If there is an error fetching the products.
  */
-export async function getProducts(): Promise<IProduct[]> {
+export async function getProducts(page: number = 1): Promise<IProduct[]> {
   try {
     const { data, error } = await supabase
       .from("products")
       .select("*")
-      .limit(36);
+      .range(page * 36 - 36, page * 36 - 1);
 
     if (error) throw error;
     return data;
@@ -35,7 +35,10 @@ interface FilterOptions {
   brands?: string[];
   query?: string;
   category?: string;
+  page?: number;
 }
+
+const brandChannel = new BroadcastChannel("brandChannel");
 
 /**
  * Retrieves filtered products based on the provided filter options.
@@ -45,8 +48,8 @@ interface FilterOptions {
  */
 export async function fetchFilteredProducts(
   filterOptions: FilterOptions = {},
-): Promise<IProduct[]> {
-  const { priceRange, brands, query, category } = filterOptions;
+): Promise<{ data: IProduct[]; dataLength: number; brandList: Set<string> }> {
+  const { priceRange, brands, query, category, page = 1 } = filterOptions;
 
   console.log(filterOptions);
 
@@ -74,12 +77,24 @@ export async function fetchFilteredProducts(
 
   const { data, error } = await supabaseQuery;
 
+  const brandList = new Set(data!.map((product: IProduct) => product.brand));
+  if (!brands?.length) {
+    brandChannel.postMessage({
+      type: "UPDATE",
+      brandList: Array.from(brandList),
+    });
+  }
+
+  const length = data!.length;
+
+  const sliced = data?.slice(page * 12 - 12, page * 12);
+
   if (error) {
     console.error("Error fetching products:", error);
     throw error;
   }
 
-  return data as IProduct[];
+  return { data: sliced as IProduct[], dataLength: length, brandList };
 }
 
 /**
@@ -96,7 +111,7 @@ export async function getProductById(id: number): Promise<IProduct> {
       .eq("id", id)
       .single();
 
-    if (error) throw error;
+    if (error) notFound();
     return data;
   } catch (error: any) {
     console.error(`Error fetching product with ID ${id}:`, error.message);

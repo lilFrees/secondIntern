@@ -12,3 +12,22 @@ body {
 .custom-active {
   background-color: rgb(235, 235, 235);
 }
+
+.gradient-text {
+  background: linear-gradient(
+    270deg,
+    #f33a3a,
+    #f3c83a,
+    #c2f33a,
+    #3af372,
+    #3ac8f3,
+    #623af3,
+    #f33a78
+  );
+  background-size: 1500% 1500%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: gradient 3s ease infinite;
+}

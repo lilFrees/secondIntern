@@ -1,10 +1,8 @@
 "use client";
 
-import { useCart } from "@/app/_context/CartContext";
 import { useSession } from "next-auth/react";
-import { useFavorite } from "@/app/_context/FavoriteContext";
 import { getCategoryList } from "@/app/_lib/product-service";
-import { useSearchQuery } from "@/app/_lib/search-query";
+import { useSearchQuery } from "@/app/_hooks/useSearchQuery";
 import {
   Box,
   Button,
@@ -30,6 +28,11 @@ import { HiOutlineShoppingCart } from "react-icons/hi2";
 import { IoIosClose } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
 import Logo from "../Logo/Logo";
+import { getCartItems } from "@/app/_lib/cart-service";
+import { ICartItem } from "@/app/_interfaces/ICartItem";
+import useCart from "@/app/_hooks/useCart";
+import useWishlist from "@/app/_hooks/useWishlist";
+import { getUser } from "@/app/_lib/user-service";
 
 async function fetchCategories() {
   const data = await getCategoryList();
@@ -40,18 +43,20 @@ function Navigation() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef(null);
   const { query, updateQuery } = useSearchQuery();
-  const { favorites } = useFavorite();
-  const { cart } = useCart();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [category, setCategory] = useState<any[]>([]);
   const { data, status } = useSession();
 
   let AccountButton;
 
+  const { cartIdArray } = useCart();
+  const { wishlistIdArray } = useWishlist();
+
+  const cartCount = cartIdArray.length;
+
   if (status === "authenticated") {
     AccountButton = (
       <Link href="/account">
-        <Button colorScheme="green">Profile</Button>
+        <Button colorScheme="green">Your Profile</Button>
       </Link>
     );
   } else if (status === "unauthenticated") {
@@ -71,12 +76,16 @@ function Navigation() {
   }
 
   useEffect(() => {
-    fetchCategories().then((data) => setCategory(data));
-    console.log(data);
-  }, [data]);
+    async function checkUser() {
+      const user = await getUser();
+    }
 
-  const favoritesCount = favorites.length;
-  const cartCount = cart.length;
+    checkUser();
+  }, []);
+
+  useEffect(() => {
+    fetchCategories().then((data) => setCategory(data));
+  }, [data]);
 
   const router = useRouter();
 
@@ -137,9 +146,9 @@ function Navigation() {
               icon={<FaRegHeart />}
               variant="ghost"
             />
-            {favoritesCount > 0 && (
+            {wishlistIdArray.length > 0 && (
               <div className="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-green-600 text-xs text-white">
-                {favoritesCount}
+                {wishlistIdArray.length}
               </div>
             )}
           </Box>

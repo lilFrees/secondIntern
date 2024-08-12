@@ -4,14 +4,18 @@ import { IProduct } from "@/app/_interfaces/IProduct";
 import ProductCard from "../UI/ProductCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
+import useCart from "@/app/_hooks/useCart";
+import useWishlist from "@/app/_hooks/useWishlist";
 
 function RecommendedProducts({ recommended }: { recommended: IProduct[] }) {
+  const { cartIdArray } = useCart();
+  const { wishlistIdArray } = useWishlist();
   return (
     <div>
       <Swiper
         slidesPerView={5}
         spaceBetween={50}
-        loop
+        loop={recommended.length > 4}
         autoplay={{ delay: 2500, disableOnInteraction: true }}
         modules={[Autoplay]}
         breakpoints={{
@@ -35,7 +39,11 @@ function RecommendedProducts({ recommended }: { recommended: IProduct[] }) {
       >
         {recommended.map((prod, i) => (
           <SwiperSlide key={i}>
-            <ProductCard prod={prod} />
+            <ProductCard
+              prod={prod}
+              isInCart={cartIdArray.includes(prod.id)}
+              isInWishlist={wishlistIdArray.includes(prod.id)}
+            />
           </SwiperSlide>
         ))}
       </Swiper>

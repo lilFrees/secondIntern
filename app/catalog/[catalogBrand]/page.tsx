@@ -1,22 +1,9 @@
-import {
-  fetchFilteredProducts,
-  getCategoryName,
-  getProductsByCategory,
-} from "@/app/_lib/product-service";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Spinner,
-} from "@chakra-ui/react";
-import descriptions from "@/app/_data/categoryDescriptions.json";
-import { Metadata } from "next";
-import SearchSidebar from "@/app/_components/SearchResults/SearchSidebar";
 import SearchProducts from "@/app/_components/SearchResults/SearchProducts";
-import { LiaProceduresSolid } from "react-icons/lia";
-import { notFound } from "next/navigation";
-import { useFilter } from "@/app/_lib/search-filters";
-import { Suspense } from "react";
+import SearchSidebar from "@/app/_components/SearchResults/SearchSidebar";
+import descriptions from "@/app/_data/categoryDescriptions.json";
+import { getCategoryName } from "@/app/_lib/product-service";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
+import { Metadata } from "next";
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const category = params.catalogBrand;
@@ -57,9 +44,7 @@ async function Page({ params }) {
 
       <div className="flex gap-10 py-10">
         <SearchSidebar />
-        <Suspense fallback={<Spinner colorScheme="green" />}>
-          <SearchProducts category={category} />
-        </Suspense>
+        <SearchProducts category={category} />
       </div>
     </div>
   );

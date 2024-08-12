@@ -5,7 +5,7 @@ import Link from "next/link";
 function Logo() {
   return (
     <Link href="/" className="flex shrink-0 items-center gap-3">
-      <Image src={logo} alt="logo" width={40} height={40} />
+      <Image src={logo} alt="logo" width={40} height={40} className="w-auto" />
       <span className="font-bold">Green Haven</span>
     </Link>
   );

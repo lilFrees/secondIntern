@@ -3,7 +3,6 @@ import { create } from "zustand";
 type State = {
   query: string;
 };
-
 type Action = {
   clear: () => void;
   updateQuery: (value: string) => void;

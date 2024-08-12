@@ -22,6 +22,14 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/_lib/supabase.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "app/_lib/supabase.js",
+    "app/_components/YandexMaps/YandexMaps.jsx",
+    "app/_hooks/useYandexMaps.js"
+  ],
   "exclude": ["node_modules"]
 }

@@ -39,7 +39,7 @@ function HeroCarousel() {
     <div className="relative mt-5">
       <SwiperReact
         slidesPerView={1}
-        className="block h-96"
+        className="absolute inset-0 block h-96 w-screen md:w-full"
         loop
         modules={[Autoplay, Pagination, Navigation]}
         pagination={{

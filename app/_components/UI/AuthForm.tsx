@@ -1,6 +1,10 @@
 "use client";
 
 import { supabase } from "@/app/_lib/supabase";
+import {
+  signInWithPassword,
+  signUpWithPassword,
+} from "@/app/_lib/user-service";
 import googleIcon from "@/public/google-icon.webp";
 import { Button, Input } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
@@ -11,55 +15,35 @@ import { useState } from "react";
 function AuthForm({ type }: { type: "login" | "register"; searchParams: any }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   async function submitGoogleHandler(e) {
-    await signIn("google", {
-      callbackUrl: "/",
-    });
+    e.preventDefault();
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+      });
+
+      console.log(data, error);
+
+      if (!error) {
+        await signIn("google", {
+          callbackUrl: "/",
+        });
+      }
+    } catch {
+      console.log("error");
+    }
   }
 
   async function loginHandler(e) {
     e.preventDefault();
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (!error) {
-        await signIn("credentials", {
-          email,
-          password,
-          redirect: false,
-        });
-      }
-
-      console.log(data);
-    } catch {
-      console.log("error");
-    }
+    signInWithPassword(email, password);
   }
 
   async function registerHandler(e) {
     e.preventDefault();
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
-      if (!error) {
-        await signIn("credentials", {
-          email,
-          password,
-          redirect: false,
-        });
-      }
-
-      console.log(data);
-    } catch {
-      console.log("error");
-    }
+    signUpWithPassword(email, password, name);
   }
 
   return (
@@ -71,6 +55,24 @@ function AuthForm({ type }: { type: "login" | "register"; searchParams: any }) {
         <h2 className="mb-8 text-center text-2xl font-bold">
           {type === "login" ? "Login to your account" : "Create an Account"}
         </h2>
+        {type === "register" && (
+          <div className="mb-4">
+            <label
+              className="mb-2 block text-sm font-bold text-gray-700"
+              htmlFor="name"
+            >
+              Your name:
+            </label>
+            <Input
+              id="name"
+              type="name"
+              required
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+        )}
         <div className="mb-4">
           <label
             className="mb-2 block text-sm font-bold text-gray-700"

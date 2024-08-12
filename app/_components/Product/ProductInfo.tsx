@@ -1,39 +1,39 @@
 "use client";
 
-import { useCart } from "@/app/_context/CartContext";
-import { useFavorite } from "@/app/_context/FavoriteContext";
 import { IProduct } from "@/app/_interfaces/IProduct";
+import { addItemToCart, updateCartItem } from "@/app/_lib/cart-service";
 import {
-  addItemToCart,
-  addItemToFavorite,
-  removeItemFromFavorites,
-} from "@/app/_lib/shopping-cart";
+  addItemToWishlist,
+  removeItemFromWishlist,
+} from "@/app/_lib/wishlist-service";
 import { Button, IconButton } from "@chakra-ui/react";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa6";
 import { FaTruck } from "react-icons/fa6";
 import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 import { TiShoppingCart } from "react-icons/ti";
 import NumberInput from "../UI/NumberInput";
 import StarRating from "../UI/StarRating";
 import { useState } from "react";
+import useWishlist from "@/app/_hooks/useWishlist";
+import useCart from "@/app/_hooks/useCart";
 
 function ProductInfo({ product }: { product: IProduct }) {
-  const { favorites } = useFavorite();
-  const { cart } = useCart();
-
   const [quantity, setQuantity] = useState<number>(1);
+  const { cart, cartIdArray } = useCart();
 
   function handleQuantityChange(value: number) {
     setQuantity(value);
   }
 
-  const isFavorite: boolean = favorites.find((value) => value.id === product.id)
-    ? true
-    : false;
+  const { wishlistIdArray } = useWishlist();
 
-  const isInCart: boolean = cart.find((value) => value.item.id === product.id)
-    ? true
-    : false;
+  const isFavorite = wishlistIdArray.includes(product.id);
+  const isInCart = cartIdArray.includes(product.id);
+
+  const currentQuantity = cart.find(
+    (item) => item.item.id === product.id,
+  )?.quantity;
 
   return (
     <div className="flex flex-col gap-5">
@@ -55,7 +55,9 @@ function ProductInfo({ product }: { product: IProduct }) {
           flexGrow={1}
           leftIcon={<TiShoppingCart />}
           onClick={() => {
-            addItemToCart(product, quantity);
+            isInCart
+              ? updateCartItem(product.id, quantity + currentQuantity!)
+              : addItemToCart(product.id, quantity);
           }}
         >
           Add to cart
@@ -67,8 +69,8 @@ function ProductInfo({ product }: { product: IProduct }) {
           colorScheme="green"
           onClick={() => {
             isFavorite
-              ? removeItemFromFavorites(product.id)
-              : addItemToFavorite(product);
+              ? removeItemFromWishlist(product.id)
+              : addItemToWishlist(product.id);
           }}
         />
       </div>

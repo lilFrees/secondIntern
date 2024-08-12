@@ -1,38 +1,53 @@
+import { signIn } from "next-auth/react";
 import { supabase } from "./supabase";
 
-export async function signUpWithPassword(email: string, password: string) {
+export async function signUpWithPassword(
+  email: string,
+  password: string,
+  name: string,
+) {
   try {
-    let { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          fullName: name,
+        },
+      },
     });
 
-    if (error) {
-      throw error;
-    }
+    if (!error) {
+      await signIn("credentials", {
+        email,
+        password,
 
-    return data;
-  } catch (error: any) {
-    console.error("Error signing up: ", error.message);
-    throw error;
+        redirect: true,
+        callbackUrl: "/",
+      });
+    }
+  } catch {
+    console.log("error");
   }
 }
 
 export async function signInWithPassword(email: string, password: string) {
   try {
-    let { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) {
-      throw error;
+    if (!error) {
+      await signIn("credentials", {
+        email,
+        password,
+        redirect: true,
+        callbackUrl: "/",
+      });
     }
-
-    return data;
-  } catch (error: any) {
-    console.error("Error signing in: ", error.message);
-    throw error;
+  } catch {
+    console.log("error");
   }
 }
 
@@ -60,6 +75,19 @@ export async function getSession() {
     }
 
     return session;
+  } catch (error: any) {
+    console.error("Error fetching user: ", error.message);
+    throw error;
+  }
+}
+
+export async function getUser() {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    return user;
   } catch (error: any) {
     console.error("Error fetching user: ", error.message);
     throw error;

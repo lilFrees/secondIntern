@@ -4,7 +4,6 @@ type State = {
   priceRange: [number, number];
   brands: string[];
 };
-
 type Action = {
   clearPriceRange: () => void;
   updatePriceRange: (value: State["priceRange"]) => void;
@@ -17,7 +16,7 @@ export const useFilter = create<State & Action>((set) => ({
   priceRange: [0, 20000],
   brands: [],
   updatePriceRange: (value) => set({ priceRange: value }),
-  clearPriceRange: () => set({ priceRange: [0, 10000] }),
+  clearPriceRange: () => set({ priceRange: [0, 20000] }),
   addBrand: (newBrand) =>
     set((state) => ({ brands: [...state.brands, newBrand] })),
   clearBrands: () => set({ brands: [""] }),

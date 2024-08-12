@@ -5,20 +5,21 @@ import { Button, Checkbox } from "@chakra-ui/react";
 import Image from "next/image";
 import NumberInput from "./NumberInput";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { removeItemFromCart } from "@/app/_lib/shopping-cart";
 import Link from "next/link";
 import { useState } from "react";
+import { removeItemFromCart, updateCartItem } from "@/app/_lib/cart-service";
+import useCart from "@/app/_hooks/useCart";
 
-function CartItem({ cartItem: { item } }: { cartItem: ICartItem }) {
-  const [quantity, setQuantity] = useState<number>(1);
-
+function CartItem({ cartItem: { item, quantity } }: { cartItem: ICartItem }) {
   function updateQuantity(value: number) {
-    setQuantity(value);
+    updateCartItem(item.id, value);
   }
+
+  const { loading } = useCart();
 
   return (
     <div className="flex gap-5 border-b border-slate-300 py-5">
-      <div className="relative flex-shrink-0 basis-[72px]">
+      <div className="relative flex-shrink-0 basis-[150px]">
         <Image
           src={item.thumbnail}
           alt="Cart product image"
@@ -43,13 +44,14 @@ function CartItem({ cartItem: { item } }: { cartItem: ICartItem }) {
             quantity={quantity}
             onChange={updateQuantity}
             max={item.stock}
+            loading={loading}
           />
           <Button
             colorScheme="green"
             variant="ghost"
             leftIcon={<FaRegTrashAlt />}
-            onClick={() => removeItemFromCart(item.id)}
             size="sm"
+            onClick={() => removeItemFromCart(item.id)}
           >
             Remove
           </Button>

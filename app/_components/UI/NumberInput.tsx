@@ -1,15 +1,17 @@
 "use client";
 
-import { Button, Input } from "@chakra-ui/react";
+import { Button, Input, Spinner } from "@chakra-ui/react";
 
 function NumberInput({
   max,
   quantity,
   onChange,
+  loading,
 }: {
   max: number;
   quantity: number;
   onChange: (value: number) => void;
+  loading?: boolean;
 }) {
   return (
     <div className="flex items-center gap-5">
@@ -21,12 +23,20 @@ function NumberInput({
       >
         -
       </Button>
-      <Input
-        colorScheme="green"
-        width={70}
-        textAlign="center"
-        value={quantity}
-      />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <Input
+          colorScheme="green"
+          width={70}
+          textAlign="center"
+          value={loading ? "..." : quantity}
+          onChange={(e) => {
+            const value = parseInt(e.target.value);
+            if (value > 0 && value <= max) onChange(value);
+          }}
+        />
+      )}
       <Button
         colorScheme="green"
         onClick={() => {

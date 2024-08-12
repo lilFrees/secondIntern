@@ -1,16 +1,34 @@
 "use client";
 
 import ProductCard from "@/app/_components/UI/ProductCard";
-import { Button } from "@chakra-ui/react";
+import { Button, Spinner } from "@chakra-ui/react";
 import { FaRegCircleXmark } from "react-icons/fa6";
 import EmptyState from "../_components/UI/EmptyState";
-import { useFavorite } from "../_context/FavoriteContext";
-import { clearAllFavorites } from "../_lib/shopping-cart";
+import useWishlist from "../_hooks/useWishlist";
+import { clearWishlist } from "../_lib/wishlist-service";
+import useCart from "../_hooks/useCart";
+import { useSession } from "next-auth/react";
+import UnauthorizedState from "../_components/UI/UnauthorizedState";
 
 function Page() {
-  const { favorites } = useFavorite();
+  const session = useSession();
 
-  if (favorites.length === 0) {
+  const { wishlist, wishlistIdArray, loading } = useWishlist();
+  const { cartIdArray } = useCart();
+
+  if (!session.data) {
+    return <UnauthorizedState />;
+  }
+
+  if (loading) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <Spinner colorScheme="green" />
+      </div>
+    );
+  }
+
+  if (wishlistIdArray.length === 0 && !loading) {
     return <EmptyState text="You have no favorites yet" />;
   }
 
@@ -21,14 +39,19 @@ function Page() {
         <Button
           leftIcon={<FaRegCircleXmark />}
           variant="ghost"
-          onClick={clearAllFavorites}
+          onClick={clearWishlist}
         >
           Clear
         </Button>
       </div>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] grid-rows-[repeat(auto-fill,320px)] gap-5 py-5">
-        {favorites.map((prod, i) => (
-          <ProductCard prod={prod} key={i} />
+        {wishlist.map((prod, i) => (
+          <ProductCard
+            prod={prod}
+            key={i}
+            isInCart={cartIdArray.includes(prod.id)}
+            isInWishlist={wishlistIdArray.includes(prod.id)}
+          />
         ))}
       </div>
     </div>

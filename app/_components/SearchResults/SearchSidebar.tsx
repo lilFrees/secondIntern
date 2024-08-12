@@ -11,14 +11,15 @@ import {
   RangeSliderThumb,
   RangeSliderTrack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import brandsData from "@/app/_data/brands.json";
 
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
-import { useFilter } from "@/app/_lib/search-filters";
+import { useFilter } from "@/app/_lib/State";
 
 function SearchSidebar() {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [allBrands, setAllBrands] = useState<string[]>(brandsData.brands);
   const {
     priceRange,
     brands,
@@ -29,7 +30,18 @@ function SearchSidebar() {
     clearBrands,
   } = useFilter();
 
-  const allBrands = brandsData.brands;
+  useEffect(() => {
+    const brandsChannels = new BroadcastChannel("brandChannel");
+    brandsChannels.onmessage = (e) => {
+      console.log(e.data);
+      if (e.data.type === "UPDATE") {
+        setAllBrands(e.data.brandList);
+      }
+    };
+    return () => {
+      brandsChannels.close();
+    };
+  }, []);
 
   const displayedBrands = !isExpanded ? allBrands.slice(0, 3) : allBrands;
 

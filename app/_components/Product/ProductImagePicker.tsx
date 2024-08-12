@@ -20,6 +20,7 @@ function ProductImagePicker({ images, title }) {
               width={200}
               height={200}
               quality={1}
+              sizes="(max-width: 768px) 50vw, 25vw"
               className="block h-full w-full object-contain"
             />
           </button>
@@ -51,7 +52,8 @@ function MainImage({ src }) {
         alt="Product image"
         fill
         className="object-contain"
-        onLoadingComplete={() => setIsloading(false)}
+        onLoad={() => setIsloading(false)}
+        sizes="(max-width: 768px) 100vw, 50vw"
         quality={10}
       />
     </div>

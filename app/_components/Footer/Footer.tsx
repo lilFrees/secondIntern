@@ -22,6 +22,7 @@ function Footer() {
                   fill
                   src={google}
                   alt="Play Market"
+                  sizes="(max-width: 768px) 50vw, 25vw"
                   className="h-auto w-auto rounded-xl object-contain outline-1 outline-white"
                 />
               </div>
@@ -29,6 +30,7 @@ function Footer() {
                 <Image
                   fill
                   src={applestore}
+                  sizes="(max-width: 768px) 50vw, 25vw"
                   alt="App Store"
                   className="h-auto w-auto rounded-xl object-contain outline-1 outline-white"
                 />
@@ -43,21 +45,21 @@ function Footer() {
             <Link href="#">About us</Link>
             <Link href="#">News</Link>
             <Link href="#">Contact</Link>
-            <Link href="#">Become a seller</Link>
+            <Link href="/merchant">Become a seller</Link>
           </div>
           <div className="flex flex-col gap-2 *:text-sm">
             <h3 className="mb-2 font-semibold">Company</h3>
             <Link href="#">About us</Link>
             <Link href="#">News</Link>
             <Link href="#">Contact</Link>
-            <Link href="#">Become a seller</Link>
+            <Link href="/merchant">Become a seller</Link>
           </div>
           <div className="flex flex-col gap-2 *:text-sm">
             <h3 className="mb-2 font-semibold">Company</h3>
             <Link href="#">About us</Link>
             <Link href="#">News</Link>
             <Link href="#">Contact</Link>
-            <Link href="#">Become a seller</Link>
+            <Link href="/merchant">Become a seller</Link>
           </div>
         </div>
         <div className="h-px w-full bg-slate-300/50" />

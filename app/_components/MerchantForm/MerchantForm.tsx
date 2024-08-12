@@ -4,6 +4,7 @@ import {
   FormErrorMessage,
   Button,
   Input,
+  Textarea,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 
@@ -17,7 +18,6 @@ function MerchantForm() {
   }
 
   function validatePhoneNumber(phoneNumber: string) {
-    // Regular expression to match optional '+' at the start and digits
     const phoneRegex = /^\+?\d{8,15}$/;
 
     if (phoneRegex.test(phoneNumber)) return "";
@@ -43,7 +43,7 @@ function MerchantForm() {
       }}
     >
       {(props) => (
-        <Form className="my-7 flex flex-col gap-7">
+        <Form className="mt-7 flex flex-col gap-7">
           <Field name="name" validate={validateName}>
             {({ field, form }) => (
               <FormControl isInvalid={form.errors.name && form.touched.name}>
@@ -67,7 +67,7 @@ function MerchantForm() {
           <Field name="brand" validate={validateRegular}>
             {({ field, form }) => (
               <FormControl isInvalid={form.errors.brand && form.touched.brand}>
-                <FormLabel>First name</FormLabel>
+                <FormLabel>Company name</FormLabel>
                 <Input {...field} placeholder="Your Company Brand" />
                 <FormErrorMessage>{form.errors.brand}</FormErrorMessage>
               </FormControl>
@@ -77,10 +77,10 @@ function MerchantForm() {
             {({ field, form }) => (
               <FormControl isInvalid={form.errors.about && form.touched.about}>
                 <FormLabel>Tell us about your company</FormLabel>
-                <Input
+                <Textarea
                   {...field}
                   placeholder="Brief description of a company"
-                />
+                ></Textarea>
                 <FormErrorMessage>{form.errors.about}</FormErrorMessage>
               </FormControl>
             )}

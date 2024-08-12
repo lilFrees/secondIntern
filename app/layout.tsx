@@ -27,6 +27,11 @@ export default function RootLayout({
           </main>
           <Footer />
         </ContextProviders>
+        <script
+          src="https://api-maps.yandex.ru/2.1/?apikey=7b588521-5efc-4725-937e-a21787051879&lang=en_US"
+          async
+          defer
+        ></script>
       </body>
     </html>
   );

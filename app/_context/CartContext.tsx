@@ -1,52 +1,62 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { ICartItem } from "../_interfaces/ICartItem";
-import {
-  cartChannel,
-  getAllCartItems,
-  updateCart,
-} from "@/app/_lib/shopping-cart";
+import { getCartItems } from "../_lib/cart-service";
 
-const CartContext = createContext<{
+interface ICartContext {
   cart: ICartItem[];
-  fetchCart: () => Promise<void>;
-}>({
-  cart: [],
-  fetchCart: async () => {},
-});
+  loading: boolean;
+  cartIdArray: number[];
+}
 
-export const CartProvider = ({ children }) => {
+export const CartContext = createContext<ICartContext | null>(null);
+
+export function CartProvider({ children }) {
   const [cart, setCart] = useState<ICartItem[]>([]);
-
-  const fetchCart = async () => {
-    const cartItems = await getAllCartItems();
-
-    setCart(cartItems);
-  };
+  const [idArray, setIdArray] = useState<number[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    fetchCart();
-    const broadcastChannel = new BroadcastChannel(cartChannel);
+    const cartChannel = new BroadcastChannel("cart");
 
-    broadcastChannel.onmessage = (event) => {
-      if (event.data.type === updateCart) {
-        fetchCart();
+    async function checkCart(displayLoader?: boolean) {
+      setLoading(displayLoader !== undefined ? displayLoader : true);
+      const data = await getCartItems();
+      if (data === null) {
+        setCart([]);
+        setIdArray([]);
+        setLoading(false);
+        return;
+      }
+      setCart(data);
+      setIdArray(data.map((item) => item.item.id));
+      setLoading(false);
+    }
+
+    checkCart();
+
+    cartChannel.onmessage = function (event) {
+      if (event.data.type === "CLEAR") {
+        setCart([]);
+        setLoading(false);
+      } else if (event.data.type === "UPDATING") {
+        console.log("updating");
+        checkCart(false);
+      } else {
+        setLoading(true);
+        checkCart();
       }
     };
 
     return () => {
-      broadcastChannel.close();
+      cartChannel.close();
     };
   }, []);
 
   return (
-    <CartContext.Provider value={{ cart, fetchCart }}>
+    <CartContext.Provider value={{ cart, loading, cartIdArray: idArray }}>
       {children}
     </CartContext.Provider>
   );
-};
-
-export function useCart() {
-  return useContext(CartContext);
 }
