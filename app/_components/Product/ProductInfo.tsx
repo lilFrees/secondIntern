@@ -6,7 +6,14 @@ import {
   addItemToWishlist,
   removeItemFromWishlist,
 } from "@/app/_lib/wishlist-service";
-import { Button, IconButton } from "@chakra-ui/react";
+import {
+  Button,
+  IconButton,
+  Modal,
+  ModalContent,
+  ModalOverlay,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
 import { FaTruck } from "react-icons/fa6";
@@ -17,10 +24,20 @@ import StarRating from "../UI/StarRating";
 import { useState } from "react";
 import useWishlist from "@/app/_hooks/useWishlist";
 import useCart from "@/app/_hooks/useCart";
+import { useSession } from "next-auth/react";
+import { auth } from "@/app/_lib/auth";
+import { Session } from "next-auth";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 function ProductInfo({ product }: { product: IProduct }) {
   const [quantity, setQuantity] = useState<number>(1);
   const { cart, cartIdArray } = useCart();
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const router = useRouter();
+
+  const { status, data } = useSession();
 
   function handleQuantityChange(value: number) {
     setQuantity(value);
@@ -55,9 +72,13 @@ function ProductInfo({ product }: { product: IProduct }) {
           flexGrow={1}
           leftIcon={<TiShoppingCart />}
           onClick={() => {
-            isInCart
-              ? updateCartItem(product.id, quantity + currentQuantity!)
-              : addItemToCart(product.id, quantity);
+            if (status === "unauthenticated") {
+              onOpen();
+            } else if (isInCart) {
+              updateCartItem(product.id, quantity);
+            } else {
+              addItemToCart(product.id, quantity);
+            }
           }}
         >
           Add to cart
@@ -100,6 +121,19 @@ function ProductInfo({ product }: { product: IProduct }) {
           </div>
         </div>
       </div>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <div className="flex flex-col items-center gap-5 p-5">
+            <h1 className="text-2xl font-semibold">
+              You need to be logged in to add items to your cart
+            </h1>
+            <Link href="/login">
+              <Button colorScheme="green">Login now</Button>
+            </Link>
+          </div>
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

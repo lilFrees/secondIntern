@@ -7,10 +7,11 @@ import { clearCart } from "@/app/_lib/cart-service";
 import useCart from "../_hooks/useCart";
 import { useSession } from "next-auth/react";
 import UnauthorizedState from "../_components/UI/UnauthorizedState";
+import CartCheckout from "../_components/Cart/CartCheckout";
 
 function Page() {
   const session = useSession();
-  const { cart, loading } = useCart();
+  const { cart, loading, cartIdArray } = useCart();
 
   if (session.status === "unauthenticated") {
     return <UnauthorizedState />;
@@ -24,7 +25,7 @@ function Page() {
     );
   }
 
-  if (!loading && cart.length === 0) {
+  if (cartIdArray.length === 0 && session.status === "authenticated") {
     return <EmptyState text="Your cart seems to be empty 😔" />;
   }
 
@@ -33,7 +34,7 @@ function Page() {
       <div className="flex items-center justify-between border-b border-b-slate-300 pb-5">
         <div className="flex items-end gap-5">
           <h2 className="text-2xl font-semibold">Cart</h2>
-          <p> item(s)</p>
+          <p>{cartIdArray.length} item(s)</p>
         </div>
         <Button
           variant="ghost"
@@ -43,7 +44,10 @@ function Page() {
           Clear
         </Button>
       </div>
-      <CartList cart={cart} />
+      <div className="relative flex items-start gap-10">
+        <CartList cart={cart} />
+        <CartCheckout />
+      </div>
     </div>
   );
 }

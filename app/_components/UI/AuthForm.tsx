@@ -12,7 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-function AuthForm({ type }: { type: "login" | "register"; searchParams: any }) {
+function AuthForm({ type }: { type: "login" | "register" }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
