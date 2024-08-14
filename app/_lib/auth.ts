@@ -19,7 +19,6 @@ const authConfig = {
 
         if (!email || !email) return null;
 
-        // We'll use this provider just for session management, not actual auth
         const user = { id: email, email };
         return user;
       },
@@ -49,7 +48,7 @@ const authConfig = {
 
   pages: {
     signIn: "/login",
-    signOut: "/logout",
+    signOut: "/account",
   },
 };
 

@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import brandsData from "@/app/_data/brands.json";
 
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
-import { useFilter } from "@/app/_lib/State";
+import { useFilter } from "@/app/_hooks/useFilters";
 
 function SearchSidebar() {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { IProduct } from "@/app/_interfaces/IProduct";
 import { fetchFilteredProducts } from "@/app/_lib/product-service";
-import { useFilter } from "../_lib/State";
+import { useFilter } from "./useFilters";
 
 function useProducts(
   searchQuery?: string,

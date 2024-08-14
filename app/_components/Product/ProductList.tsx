@@ -8,26 +8,40 @@ import { useEffect, useState } from "react";
 import { IProduct } from "@/app/_interfaces/IProduct";
 import useWishlist from "@/app/_hooks/useWishlist";
 import { Button, Spinner } from "@chakra-ui/react";
+const limit = 36;
 
 function ProductList() {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [limit, setLimit] = useState<number>(1);
+  const [page, setPage] = useState<number>(1);
+
   useEffect(() => {
     async function fetchProducts() {
       setIsLoading(true);
-      const productsData = await getProducts(limit);
-      setProducts((prev) => [...prev, ...productsData]);
+      const productsData = await getProducts(page, limit);
+      setProducts((prev) => {
+        if (
+          prev.filter((prod) => prod.id === productsData[0].id).length === 0
+        ) {
+          return [...prev, ...productsData];
+        } else {
+          return prev;
+        }
+      });
       setIsLoading(false);
     }
 
     fetchProducts();
-  }, [limit]);
+  }, [page]);
+
+  const handleLoadMore = () => {
+    setPage((prev) => prev + 1);
+  };
 
   const { cartIdArray } = useCart();
   const { wishlist, wishlistIdArray } = useWishlist();
 
-  if (isLoading) {
+  if (isLoading && products.length === 0) {
     return (
       <div className="flex h-full w-full items-center justify-center">
         <Spinner />
@@ -47,7 +61,13 @@ function ProductList() {
           />
         ))}
       </div>
-      <Button onClick={() => setLimit((prev) => prev + 1)}>See more...</Button>
+      {isLoading ? (
+        <div className="flex justify-center">
+          <Spinner />
+        </div>
+      ) : (
+        <Button onClick={handleLoadMore}>See more...</Button>
+      )}
     </div>
   );
 }

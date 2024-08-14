@@ -15,22 +15,15 @@ export const CartContext = createContext<ICartContext | null>(null);
 export function CartProvider({ children }) {
   const [cart, setCart] = useState<ICartItem[]>([]);
   const [idArray, setIdArray] = useState<number[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const cartChannel = new BroadcastChannel("cart");
 
-    async function checkCart(displayLoader?: boolean) {
-      setLoading(displayLoader !== undefined ? displayLoader : true);
+    async function checkCart() {
       const data = await getCartItems();
-      if (data === null) {
-        setCart([]);
-        setIdArray([]);
-        setLoading(false);
-        return;
-      }
-      setCart(data);
       setIdArray(data.map((item) => item.item.id));
+      setCart(data);
       setLoading(false);
     }
 
@@ -39,10 +32,10 @@ export function CartProvider({ children }) {
     cartChannel.onmessage = function (event) {
       if (event.data.type === "CLEAR") {
         setCart([]);
+        setIdArray([]);
         setLoading(false);
-      } else if (event.data.type === "UPDATING") {
-        console.log("updating");
-        checkCart(false);
+      } else if (event.data.type === "UPDATE_ITEM") {
+        checkCart();
       } else {
         setLoading(true);
         checkCart();

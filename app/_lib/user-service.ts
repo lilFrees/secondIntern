@@ -53,7 +53,9 @@ export async function signInWithPassword(email: string, password: string) {
 
 export async function signOut() {
   try {
-    let { error } = await supabase.auth.signOut();
+    let { error } = await supabase.auth.signOut({
+      scope: "global",
+    });
 
     if (error) {
       throw error;
@@ -98,11 +100,18 @@ export async function signInWithGoogle() {
   try {
     let { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: {
+        redirectTo: "https://rfxujkcyzpaqbojdznsb.supabase.co/auth/v1/callback",
+      },
     });
 
     if (error) {
       throw error;
     }
+
+    await signIn("google", {
+      redirectTo: "https://rfxujkcyzpaqbojdznsb.supabase.co/auth/v1/callback",
+    });
 
     return data;
   } catch (error: any) {

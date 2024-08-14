@@ -12,12 +12,17 @@ import { IProduct } from "../_interfaces/IProduct";
  * @returns A promise that resolves to an array of products.
  * @throws If there is an error fetching the products.
  */
-export async function getProducts(page: number = 1): Promise<IProduct[]> {
+export async function getProducts(
+  page: number = 1,
+  limit: number = 36,
+): Promise<IProduct[]> {
+  const from = (page - 1) * limit;
+  const to = page * limit - 1;
   try {
     const { data, error } = await supabase
       .from("products")
       .select("*")
-      .range(page * 36 - 36, page * 36 - 1);
+      .range(from, to);
 
     if (error) throw error;
     return data;

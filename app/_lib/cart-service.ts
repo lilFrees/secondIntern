@@ -73,14 +73,11 @@ export async function updateCartItem(id: number, quantity: number) {
     if (!userId) {
       return null;
     }
-    cartChanel.postMessage({ type: "UPDATING" });
     const { data, error } = await supabase
       .from("cart_items")
       .update({ quantity: quantity })
       .eq("user_id", userId)
       .eq("product_id", id);
-
-    console.log(error);
 
     if (!error) {
       cartChanel.postMessage({ type: "UPDATE_ITEM" });
@@ -118,7 +115,9 @@ export async function clearCart() {
     }
     const { data, error } = await supabase
       .from("cart_items")
-      .delete()
+      .delete({
+        count: "estimated",
+      })
       .eq("user_id", userId);
 
     if (!error) {

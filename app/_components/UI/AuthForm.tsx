@@ -1,38 +1,38 @@
 "use client";
 
-import { supabase } from "@/app/_lib/supabase";
 import {
+  signInWithGoogle,
   signInWithPassword,
   signUpWithPassword,
 } from "@/app/_lib/user-service";
 import googleIcon from "@/public/google-icon.webp";
-import { Button, Input } from "@chakra-ui/react";
+import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function AuthForm({ type }: { type: "login" | "register" }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  function toggleShowPassword() {
+    setShowPassword((prev) => !prev);
+  }
 
   async function submitGoogleHandler(e) {
     e.preventDefault();
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-      });
+      const data = await signInWithGoogle();
 
-      console.log(data, error);
-
-      if (!error) {
-        await signIn("google", {
-          callbackUrl: "/",
-        });
+      if (data) {
+        console.log("success");
       }
-    } catch {
-      console.log("error");
+    } catch (error) {
+      console.log("Error signing in with Google ", error);
     }
   }
 
@@ -96,14 +96,21 @@ function AuthForm({ type }: { type: "login" | "register" }) {
           >
             Password:
           </label>
-          <Input
-            id="password"
-            type="password"
-            required
-            name="email"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <InputGroup>
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              required
+              name="email"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <InputRightElement width="4.5rem">
+              <Button h="1.75rem" size="sm" onClick={toggleShowPassword}>
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
         </div>
 
         <Button colorScheme="green" type="submit" className="w-full">

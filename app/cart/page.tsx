@@ -14,7 +14,7 @@ function Page() {
   const { cart, loading, cartIdArray } = useCart();
 
   if (session.status === "unauthenticated") {
-    return <UnauthorizedState />;
+    return <UnauthorizedState text="Please login to view your cart" />;
   }
 
   if (loading) {

@@ -17,7 +17,7 @@ function Page() {
   const { cartIdArray } = useCart();
 
   if (!session.data) {
-    return <UnauthorizedState />;
+    return <UnauthorizedState text="Please login to see your wishlist" />;
   }
 
   if (loading) {

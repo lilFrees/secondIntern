@@ -10,7 +10,7 @@ function Footer() {
   return (
     <div className="mt-auto bg-black/80 text-white">
       <div className="mx-auto max-w-6xl space-y-10 px-2 py-10">
-        <div className="grid w-full grid-cols-5 gap-24">
+        <div className="grid w-full grid-cols-5 gap-24 text-gray-400">
           <div className="col-span-2 flex flex-col gap-2">
             <p className="text-sm">Any questions for us?</p>
             <Link href="tel:+998936604530" className="text-xl">
@@ -41,21 +41,21 @@ function Footer() {
             </Link>
           </div>
           <div className="flex flex-col gap-2 *:text-sm">
-            <h3 className="mb-2 text-base font-semibold">Company</h3>
+            <h3 className="mb-2 font-semibold text-gray-100">Company</h3>
             <Link href="#">About us</Link>
             <Link href="#">News</Link>
             <Link href="#">Contact</Link>
             <Link href="/merchant">Become a seller</Link>
           </div>
           <div className="flex flex-col gap-2 *:text-sm">
-            <h3 className="mb-2 font-semibold">Company</h3>
+            <h3 className="mb-2 font-semibold text-gray-100">Company</h3>
             <Link href="#">About us</Link>
             <Link href="#">News</Link>
             <Link href="#">Contact</Link>
             <Link href="/merchant">Become a seller</Link>
           </div>
           <div className="flex flex-col gap-2 *:text-sm">
-            <h3 className="mb-2 font-semibold">Company</h3>
+            <h3 className="mb-2 font-semibold text-gray-100">Company</h3>
             <Link href="#">About us</Link>
             <Link href="#">News</Link>
             <Link href="#">Contact</Link>

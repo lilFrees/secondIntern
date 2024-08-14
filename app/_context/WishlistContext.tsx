@@ -20,14 +20,14 @@ export function WishlistProvider({ children }) {
   useEffect(() => {
     const wishListChannel = new BroadcastChannel("wishlist");
 
-    async function checkCart() {
+    async function checkWishlist() {
       const data = await getWishlist();
       setIdArray(data.map((item) => item.id));
       setWishlist(data);
       setLoading(false);
     }
 
-    checkCart();
+    checkWishlist();
 
     wishListChannel.onmessage = function (event) {
       if (event.data.type === "CLEAR") {
@@ -36,7 +36,7 @@ export function WishlistProvider({ children }) {
         setIdArray([]);
       } else {
         setLoading(true);
-        checkCart();
+        checkWishlist();
       }
     };
 
