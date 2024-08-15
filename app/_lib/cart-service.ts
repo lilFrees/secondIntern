@@ -51,8 +51,11 @@ export async function addItemToCart(id: number, quantity: number = 1) {
   try {
     const userId = (await supabase.auth.getUser()).data.user?.id;
     if (!userId) {
+      console.log("No user");
       return null;
     }
+
+    console.log("there is a user");
     const { data, error } = await supabase.from("cart_items").insert({
       user_id: userId,
       product_id: id,

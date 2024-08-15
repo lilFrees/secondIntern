@@ -14,7 +14,8 @@ function OrderList() {
       <h2 className="text-2xl font-semibold">Your orders</h2>
       {orders.map((order) => (
         <div key={order.id} className="mb-5 bg-slate-500">
-          <h3>Order {order.id}</h3>
+          <h3>Order id: {order.id}</h3>
+          <p>Total: ${order.total_amount}</p>
           <ul>
             {order.items.map((item) => (
               <li key={item.id}>

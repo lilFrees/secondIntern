@@ -30,6 +30,6 @@
     "app/_lib/supabase.js",
     "app/_components/YandexMaps/YandexMaps.jsx",
     "app/_hooks/useYandexMaps.js"
-  ],
+, "app/locations/page.jsx"  ],
   "exclude": ["node_modules"]
 }
