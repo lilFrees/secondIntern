@@ -84,7 +84,7 @@ function CategoryCard({ cat, image }) {
         fill
       />
       <div className="absolute inset-0 z-30 bg-white/70"></div>
-      <div className="relative z-50 text-xl font-bold">{cat.name}</div>
+      <div className="z-50 text-xl font-bold">{cat.name}</div>
     </Link>
   );
 }

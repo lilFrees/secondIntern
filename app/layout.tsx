@@ -4,6 +4,7 @@ import "./globals.css";
 import Navigation from "./_components/Navigation/Navigation";
 import { ContextProviders } from "./ContextProviders";
 import Footer from "./_components/Footer/Footer";
+import React from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,18 +20,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className + " flex flex-col bg-gray-100"}>
-        <ContextProviders>
-          <Navigation />
-          <main className="mx-auto w-full max-w-6xl flex-1 px-2 *:min-h-[70vh]">
-            {children}
-          </main>
-          <Footer />
-        </ContextProviders>
-        <script
-          async
-          src="https://unpkg.com/react-yandex-maps/dist/production/react-yandex-maps.umd.js"
-        ></script>
+      <body
+        className={
+          inter.className + " flex flex-col overflow-hidden bg-gray-100"
+        }
+      >
+        <React.StrictMode>
+          <ContextProviders>
+            <Navigation />
+            <main className="w-full flex-1 overflow-auto">
+              <div className="mx-auto max-w-6xl px-2 *:min-h-[70vh]">
+                {children}
+              </div>
+              <Footer />
+            </main>
+          </ContextProviders>
+        </React.StrictMode>
       </body>
     </html>
   );

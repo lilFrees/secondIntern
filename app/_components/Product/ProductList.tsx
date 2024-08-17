@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { IProduct } from "@/app/_interfaces/IProduct";
 import useWishlist from "@/app/_hooks/useWishlist";
 import { Button, Spinner } from "@chakra-ui/react";
-const limit = 36;
+const limit = 20;
 
 function ProductList() {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -51,7 +51,7 @@ function ProductList() {
 
   return (
     <div className="flex w-full flex-col gap-5">
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] grid-rows-[repeat(auto-fill,320px)] gap-5 py-5">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] grid-rows-[repeat(auto-fill,320px)] gap-5 py-5">
         {products.map((prod, i) => (
           <ProductCard
             prod={prod}

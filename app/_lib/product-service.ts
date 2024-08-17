@@ -14,7 +14,7 @@ import { IProduct } from "../_interfaces/IProduct";
  */
 export async function getProducts(
   page: number = 1,
-  limit: number = 36,
+  limit: number = 20,
 ): Promise<IProduct[]> {
   const from = (page - 1) * limit;
   const to = page * limit - 1;

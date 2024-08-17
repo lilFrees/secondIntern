@@ -19,7 +19,7 @@ export async function getCartItems(): Promise<ICartItem[]> {
     }
 
     if (data?.length === 0) {
-      throw new Error("No items in cart");
+      return [];
     }
 
     const items = await supabase

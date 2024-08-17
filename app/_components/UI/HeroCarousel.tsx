@@ -36,11 +36,12 @@ function HeroCarousel() {
   const images = [slide1, slide2, slide3, slide4];
 
   return (
-    <div className="relative mt-5">
+    <div className="relative mt-5 aspect-[5/2] h-auto w-full">
       <SwiperReact
         slidesPerView={1}
-        className="absolute inset-0 block h-96 w-screen md:w-full"
+        className="absolute inset-0 block h-full w-full"
         loop
+        spaceBetween={5}
         modules={[Autoplay, Pagination, Navigation]}
         pagination={{
           clickable: true,
