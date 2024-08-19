@@ -1,55 +1,97 @@
-'use client';
+"use client";
 
-import { createContext, useEffect, useState } from 'react';
-import { ICartItem } from '../_interfaces/ICartItem';
-import { getCartItems } from '../_lib/cart-service';
+import { createContext, useEffect, useState } from "react";
+import { ICartItem } from "../_interfaces/ICartItem";
+import { getCartItems } from "../_lib/cart-service";
+import { useToast } from "@chakra-ui/react";
 
 interface ICartContext {
-	cart: ICartItem[];
-	loading: boolean;
-	cartIdArray: number[];
+  cart: ICartItem[];
+  loading: boolean;
+  mounted: boolean;
+  cartIdArray: number[];
 }
 
 export const CartContext = createContext<ICartContext | null>(null);
 
 export function CartProvider({ children }) {
-	const [cart, setCart] = useState<ICartItem[]>([]);
-	const [idArray, setIdArray] = useState<number[]>([]);
-	const [loading, setLoading] = useState<boolean>(true);
+  const [cart, setCart] = useState<ICartItem[]>([]);
+  const [idArray, setIdArray] = useState<number[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [mounted, setMounted] = useState<boolean>(false);
 
-	useEffect(() => {
-		const cartChannel = new BroadcastChannel('cart');
+  const toast = useToast();
 
-		async function checkCart() {
-			const data = await getCartItems();
-			setIdArray(data.map((item) => item.item.id));
-			setCart(data);
-			setLoading(false);
-		}
+  useEffect(() => {
+    const cartChannel = new BroadcastChannel("cart");
 
-		checkCart();
+    async function checkCart() {
+      const data = await getCartItems();
+      setMounted(true);
+      setIdArray(data.map((item) => item.item.id));
+      setCart(data);
+      setLoading(false);
+    }
 
-		cartChannel.onmessage = function (event) {
-			if (event.data.type === 'CLEAR') {
-				setCart([]);
-				setIdArray([]);
-				setLoading(false);
-			} else if (event.data.type === 'UPDATE_ITEM') {
-				checkCart();
-			} else {
-				setLoading(true);
-				checkCart();
-			}
-		};
+    checkCart();
 
-		return () => {
-			cartChannel.close();
-		};
-	}, []);
+    cartChannel.onmessage = function (event) {
+      if (event.data.type === "CLEAR") {
+        setCart([]);
+        setIdArray([]);
+        setLoading(false);
+        toast({
+          title: "Cart Cleared",
+          description: "Your cart has been cleared",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          variant: "subtle",
+        });
+      } else if (event.data.type === "UPDATE_ITEM") {
+        setLoading(true);
+        checkCart();
+      } else {
+        switch (event.data.type) {
+          case "ADD_ITEM":
+            toast({
+              title: "Item Added",
+              description: "Item has been added to cart",
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+              variant: "subtle",
+            });
+            break;
+          case "REMOVE_ITEM":
+            toast({
+              title: "Item Removed",
+              description: "Item has been removed from cart",
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+              variant: "subtle",
+            });
+            break;
+          default:
+            break;
+        }
 
-	return (
-		<CartContext.Provider value={{ cart, loading, cartIdArray: idArray }}>
-			{children}
-		</CartContext.Provider>
-	);
+        setLoading(true);
+        checkCart();
+      }
+    };
+
+    return () => {
+      cartChannel.close();
+    };
+  }, []);
+
+  return (
+    <CartContext.Provider
+      value={{ cart, loading, cartIdArray: idArray, mounted }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
 }

@@ -12,12 +12,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  validateEmail,
+  validatePassword,
+  validateName,
+} from "@/app/_helpers/validate-form";
 
 function AuthForm({ type }: { type: "login" | "register" }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [credentialsError, setCredentialsError] = useState("");
+  const [nameError, setNameError] = useState("");
 
   function toggleShowPassword() {
     setShowPassword((prev) => !prev);
@@ -38,12 +48,40 @@ function AuthForm({ type }: { type: "login" | "register" }) {
 
   async function loginHandler(e) {
     e.preventDefault();
-    signInWithPassword(email, password);
+    if (type === "register") {
+      const emailError = validateEmail(email);
+      const passwordError = validatePassword(password);
+
+      setEmailError(emailError);
+      setPasswordError(passwordError);
+
+      if (emailError || passwordError) {
+        return;
+      }
+    }
+
+    const error = await signInWithPassword(email, password);
+    if (error) {
+      setCredentialsError(error);
+    }
   }
 
   async function registerHandler(e) {
     e.preventDefault();
-    signUpWithPassword(email, password, name);
+
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+    const nameError = validateName(name);
+
+    setEmailError(emailError);
+    setPasswordError(passwordError);
+    setNameError(nameError);
+
+    if (emailError || passwordError || nameError) {
+      return;
+    }
+
+    const error = await signUpWithPassword(email, password, name);
   }
 
   return (
@@ -66,11 +104,15 @@ function AuthForm({ type }: { type: "login" | "register" }) {
             <Input
               id="name"
               type="name"
-              required
               name="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              isInvalid={nameError !== ""}
+              errorBorderColor={passwordError !== "" ? "crimson" : ""}
             />
+            {nameError && (
+              <p className="mt-1 text-sm text-red-500">{nameError}</p>
+            )}
           </div>
         )}
         <div className="mb-4">
@@ -83,11 +125,15 @@ function AuthForm({ type }: { type: "login" | "register" }) {
           <Input
             id="email"
             type="email"
-            required
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            isInvalid={emailError !== ""}
+            errorBorderColor={passwordError !== "" ? "crimson" : ""}
           />
+          {emailError && (
+            <p className="mt-1 text-sm text-red-500">{emailError}</p>
+          )}
         </div>
         <div className="mb-4">
           <label
@@ -100,10 +146,11 @@ function AuthForm({ type }: { type: "login" | "register" }) {
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
-              required
-              name="email"
+              name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              isInvalid={passwordError !== ""}
+              errorBorderColor={passwordError !== "" ? "crimson" : ""}
             />
             <InputRightElement width="4.5rem">
               <Button h="1.75rem" size="sm" onClick={toggleShowPassword}>
@@ -111,8 +158,14 @@ function AuthForm({ type }: { type: "login" | "register" }) {
               </Button>
             </InputRightElement>
           </InputGroup>
+          {passwordError && (
+            <p className="mt-1 text-sm text-red-500">{passwordError}</p>
+          )}
         </div>
-
+        {credentialsError && (
+          <p className="mt-1 text-sm text-red-500">{credentialsError}</p>
+        )}
+        <div className="mb-4"></div>
         <Button colorScheme="green" type="submit" className="w-full">
           {type === "login" ? "Login" : "Register"}
         </Button>

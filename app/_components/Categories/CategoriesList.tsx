@@ -80,11 +80,11 @@ function CategoryCard({ cat, image }) {
         alt="Beauty products"
         placeholder="blur"
         sizes="(max-width: 768px) 50vw, 25vw"
-        className="absolute z-20 object-cover transition-all duration-300 hover:scale-110"
+        className="absolute z-10 object-cover transition-all duration-300 hover:scale-110"
         fill
       />
-      <div className="absolute inset-0 z-30 bg-white/70"></div>
-      <div className="z-50 text-xl font-bold">{cat.name}</div>
+      <div className="absolute inset-0 z-[15] bg-white/70"></div>
+      <div className="z-20 text-xl font-bold">{cat.name}</div>
     </Link>
   );
 }

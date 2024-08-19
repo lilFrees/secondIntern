@@ -9,11 +9,11 @@ async function Page({ searchParams }) {
 
   return (
     <div className="py-5">
-      <h1 className="mt-10 text-3xl font-bold">
+      <h1 className="mt-10 text-xl font-bold md:text-3xl">
         Search results for {searchParams.query}
       </h1>
 
-      <div className="flex gap-10 py-10">
+      <div className="flex flex-col gap-5 py-10 md:flex-row md:gap-10">
         <SearchSidebar />
         <SearchProducts searchQuery={searchParams.query} />
       </div>

@@ -19,7 +19,7 @@ export const useFilter = create<State & Action>((set) => ({
   clearPriceRange: () => set({ priceRange: [0, 20000] }),
   addBrand: (newBrand) =>
     set((state) => ({ brands: [...state.brands, newBrand] })),
-  clearBrands: () => set({ brands: [""] }),
+  clearBrands: () => set({ brands: [] }),
   removeBrand: (brand) =>
     set((state) => ({ brands: state.brands.filter((brn) => brn !== brand) })),
 }));

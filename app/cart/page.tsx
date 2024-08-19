@@ -1,23 +1,25 @@
 "use client";
+import { clearCart } from "@/app/_lib/cart-service";
 import { Button, Spinner } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { FaRegCircleXmark } from "react-icons/fa6";
+import CartCheckout from "../_components/Cart/CartCheckout";
 import CartList from "../_components/Cart/CartList";
 import EmptyState from "../_components/UI/EmptyState";
-import { clearCart } from "@/app/_lib/cart-service";
-import useCart from "../_hooks/useCart";
-import { useSession } from "next-auth/react";
 import UnauthorizedState from "../_components/UI/UnauthorizedState";
-import CartCheckout from "../_components/Cart/CartCheckout";
+import useCart from "../_hooks/useCart";
+import useScreenSize from "../_hooks/useScreenSize";
 
 function Page() {
   const session = useSession();
-  const { cart, loading, cartIdArray } = useCart();
+  const { cart, cartIdArray, mounted } = useCart();
+  const { width } = useScreenSize();
 
   if (session.status === "unauthenticated") {
     return <UnauthorizedState text="Please login to view your cart" />;
   }
 
-  if (loading) {
+  if (!mounted) {
     return (
       <div className="flex h-full w-full items-center justify-center">
         <Spinner colorScheme="green" size="lg" />
@@ -33,18 +35,19 @@ function Page() {
     <div className="py-5">
       <div className="flex items-center justify-between border-b border-b-slate-300 pb-5">
         <div className="flex items-end gap-5">
-          <h2 className="text-2xl font-semibold">Cart</h2>
-          <p>{cartIdArray.length} item(s)</p>
+          <h2 className="text-xl font-semibold md:text-2xl">Cart</h2>
+          <p className="text-sm md:text-base">{cartIdArray.length} item(s)</p>
         </div>
         <Button
           variant="ghost"
           leftIcon={<FaRegCircleXmark />}
           onClick={() => clearCart()}
+          size={width <= 768 ? "sm" : "md"}
         >
           Clear
         </Button>
       </div>
-      <div className="relative flex items-start gap-10">
+      <div className="relative flex flex-col items-start gap-10 md:flex-row">
         <CartList cart={cart} />
         <CartCheckout />
       </div>

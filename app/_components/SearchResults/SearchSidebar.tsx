@@ -3,6 +3,13 @@
 import {
   Button,
   Checkbox,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
@@ -10,16 +17,18 @@ import {
   RangeSliderFilledTrack,
   RangeSliderThumb,
   RangeSliderTrack,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import brandsData from "@/app/_data/brands.json";
 
+import { MdOutlineFilterList } from "react-icons/md";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import { useFilter } from "@/app/_hooks/useFilters";
+import useScreenSize from "@/app/_hooks/useScreenSize";
 
-function SearchSidebar() {
+function SearchSidebar({ brandsList }: { brandsList: string[] }) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const [allBrands, setAllBrands] = useState<string[]>(brandsData.brands);
   const {
     priceRange,
     brands,
@@ -30,20 +39,7 @@ function SearchSidebar() {
     clearBrands,
   } = useFilter();
 
-  useEffect(() => {
-    const brandsChannels = new BroadcastChannel("brandChannel");
-    brandsChannels.onmessage = (e) => {
-      console.log(e.data);
-      if (e.data.type === "UPDATE") {
-        setAllBrands(e.data.brandList);
-      }
-    };
-    return () => {
-      brandsChannels.close();
-    };
-  }, []);
-
-  const displayedBrands = !isExpanded ? allBrands.slice(0, 3) : allBrands;
+  const displayedBrands = !isExpanded ? brandsList.slice(0, 3) : brandsList;
 
   const handlePriceRangeChange = (newRange: [number, number]) => {
     updatePriceRange(newRange);
@@ -68,7 +64,7 @@ function SearchSidebar() {
   };
 
   return (
-    <div className="flex flex-grow basis-[30%] flex-col gap-5">
+    <div className="flex flex-grow flex-col gap-5 md:basis-[30%]">
       <div className="flex w-full items-center justify-between">
         <div className="text-lg font-semibold">Price</div>
         <button
@@ -144,4 +140,57 @@ function SearchSidebar() {
   );
 }
 
-export default SearchSidebar;
+function SideBar() {
+  const { width } = useScreenSize();
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const btnRef = useRef(null);
+
+  const [allBrands, setAllBrands] = useState<string[]>(brandsData.brands);
+
+  useEffect(() => {
+    const brandsChannels = new BroadcastChannel("brandChannel");
+    brandsChannels.onmessage = (e) => {
+      if (e.data.type === "UPDATE") {
+        setAllBrands(e.data.brandList);
+      }
+    };
+    return () => {
+      brandsChannels.close();
+    };
+  }, []);
+
+  return (
+    <div>
+      {width <= 768 && (
+        <div>
+          <IconButton
+            aria-label="Filter toggle"
+            icon={<MdOutlineFilterList fontSize={35} />}
+            onClick={onOpen}
+            ref={btnRef}
+          />
+          <Drawer
+            isOpen={isOpen}
+            placement="top"
+            onClose={onClose}
+            finalFocusRef={btnRef}
+          >
+            <DrawerOverlay />
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerBody>
+                <SearchSidebar brandsList={allBrands} />
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
+        </div>
+      )}
+
+      {width > 768 && <SearchSidebar brandsList={allBrands} />}
+    </div>
+  );
+}
+
+export default SideBar;

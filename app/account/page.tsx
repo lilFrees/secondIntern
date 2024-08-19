@@ -13,7 +13,7 @@ async function Page() {
   }
 
   return (
-    <div>
+    <div className="py-5">
       <h1>Welcome, {session?.user?.email}</h1>
       <Suspense fallback={<div>Loading orders...</div>}>
         <OrderList />

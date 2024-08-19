@@ -23,7 +23,7 @@ export async function addOrder({
     })
     .select("id");
 
-  if (error) throw error;
+  if (error) return error;
 
   // Then add the items to the order_items table
   const orderId = data[0].id;

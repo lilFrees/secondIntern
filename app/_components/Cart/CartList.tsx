@@ -7,7 +7,7 @@ function CartList({ cart }: { cart: ICartItem[] }) {
   }
 
   return (
-    <div className="flex basis-2/3 flex-col">
+    <div className="flex w-full basis-full flex-col md:basis-2/3">
       {cart.map((item, i) => (
         <CartItem cartItem={item} key={i} />
       ))}

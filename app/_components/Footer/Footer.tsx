@@ -30,36 +30,35 @@ function Footer() {
     <div className="mt-auto bg-black/80 pb-20 text-white md:pb-0">
       <div className="mx-auto max-w-6xl space-y-10 px-2 py-10">
         <div className="grid w-full grid-cols-1 text-gray-400 md:grid-cols-5 md:gap-24">
-          <div className="flex flex-col gap-2 md:col-span-2">
+          <div className="flex flex-col gap-2 text-center md:col-span-2 md:text-left">
             <p className="text-sm">Any questions for us?</p>
             <Link href="tel:+998936604530" className="text-xl">
               +998 93 660 45 30
             </Link>
-            <div className="flex flex-col items-center gap-2 md:gap-5">
+            <div className="mb-10 flex flex-col items-center gap-2 md:items-start md:gap-5">
               <h2 className="text-gray-100">Download the app</h2>
 
-              <div className="relative h-16 w-full">
-                <Image
-                  fill
-                  src={google}
-                  alt="Play Market"
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  className="h-auto w-auto rounded-xl object-contain outline-1 outline-white"
-                />
-              </div>
-              <div className="relative h-16 w-full">
-                <Image
-                  fill
-                  src={applestore}
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  alt="App Store"
-                  className="h-auto w-auto rounded-xl object-contain outline-1 outline-white"
-                />
+              <div className="flex flex-col gap-5 md:flex-row">
+                <div className="relative h-10 w-32">
+                  <Image
+                    fill
+                    src={google}
+                    alt="Play Market"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    className="h-auto w-auto rounded-xl object-contain outline-1 outline-white"
+                  />
+                </div>
+                <div className="relative h-10 w-32">
+                  <Image
+                    fill
+                    src={applestore}
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    alt="App Store"
+                    className="h-auto w-auto rounded-xl object-contain outline-1 outline-white"
+                  />
+                </div>
               </div>
             </div>
-            <Link href="/locations" className="underline">
-              Locations in Tashkent
-            </Link>
           </div>
           {isMediumScreen && (
             <>
@@ -121,13 +120,13 @@ function Footer() {
           )}
         </div>
         {isMediumScreen && <div className="h-px w-full bg-slate-300/50" />}
-        <div className="flex">
+        <div className="flex flex-col gap-5 text-center md:flex-row md:text-left">
           <div className="basis-1/2 text-xs">
             2024 © greenhavenexpress.com All rights reserved. The indicated
             value of the goods and the terms of their purchase are valid as of
             the current date
           </div>
-          <div className="ml-auto flex items-center gap-5">
+          <div className="ml-auto flex w-full flex-wrap items-center justify-center gap-5 md:justify-normal">
             <IconButton
               aria-label="Telegram"
               className="rounded-full"

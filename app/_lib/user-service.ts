@@ -25,7 +25,10 @@ export async function signUpWithPassword(
         redirect: true,
         callbackUrl: "/",
       });
+      return;
     }
+
+    return error.message;
   } catch {
     console.log("error");
   }
@@ -45,7 +48,10 @@ export async function signInWithPassword(email: string, password: string) {
         redirect: true,
         callbackUrl: "/",
       });
+      return;
     }
+
+    return error.message;
   } catch {
     console.log("error");
   }

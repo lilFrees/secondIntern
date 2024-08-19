@@ -24,7 +24,7 @@ export default function RootLayout({
         <React.StrictMode>
           <ContextProviders>
             <Navigation />
-            <main className="w-full flex-1">
+            <main className="md: w-full flex-1 p-0 pt-16">
               <div className="mx-auto max-w-6xl px-2 *:min-h-[70vh]">
                 {children}
               </div>

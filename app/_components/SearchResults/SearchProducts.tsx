@@ -22,7 +22,7 @@ function SearchProducts({
 
   if (loading) {
     return (
-      <div className="flex-grow basis-[70%] py-5">
+      <div className="w-full flex-grow basis-full py-5 md:basis-[70%]">
         <div className="w-full text-center">
           <Spinner />
         </div>
@@ -41,7 +41,7 @@ function SearchProducts({
   if (products.data.length === 0) {
     return (
       <div className="flex-grow basis-[70%] py-5">
-        <div className="w-full text-center text-3xl">
+        <div className="w-full text-center text-xl md:text-3xl">
           No products were found
         </div>
       </div>
