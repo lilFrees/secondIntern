@@ -44,6 +44,8 @@ export const authConfig = {
     },
   },
 
+  trustedHosts: ["localhost", "green-haven.netlify.app"],
+
   pages: {
     signIn: "/login",
     signOut: "/account",
