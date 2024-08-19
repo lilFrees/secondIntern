@@ -1,10 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { supabase } from "@/app/_lib/supabase";
-import { redirect } from "next/navigation";
 
-const authConfig = {
+export const authConfig = {
   providers: [
     CredentialsProvider({
       name: "Credentials",

@@ -1,12 +1,14 @@
+import { getSession } from "next-auth/react";
 import AuthForm from "../_components/UI/AuthForm";
 import { auth } from "../_lib/auth";
 import { redirect } from "next/navigation";
 
 const Page = async () => {
   const session = await auth();
-  if (session) {
+  if (session?.user) {
     redirect("/account");
   }
+
   return <AuthForm type="register" />;
 };
 

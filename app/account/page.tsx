@@ -1,15 +1,13 @@
 import LogoutButton from "@/app/_components/UI/LogoutButton";
-import UnauthorizedState from "../_components/UI/UnauthorizedState";
-import { auth } from "@/app/_lib/auth";
-import OrderList from "../_components/Orders/OrderList";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import OrderList from "../_components/Orders/OrderList";
+import { auth } from "../_lib/auth";
 
 async function Page() {
   const session = await auth();
-  console.log(session);
-
-  if (!session) {
-    return <UnauthorizedState text="Please login to see your account" />;
+  if (!session?.user) {
+    redirect("/login");
   }
 
   return (

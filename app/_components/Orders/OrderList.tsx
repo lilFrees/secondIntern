@@ -52,8 +52,8 @@ function OrderList() {
             <div className="mb-4">
               <h3 className="text-lg font-semibold text-gray-800">Products</h3>
               <ul className="list-inside list-disc">
-                {order.items.map((item) => (
-                  <li key={item.id} className="text-gray-600">
+                {order.items.map((item, i) => (
+                  <li key={i} className="text-gray-600">
                     {item.product.title} - ${item.price.toFixed(2)}
                   </li>
                 ))}
