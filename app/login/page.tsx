@@ -1,5 +1,4 @@
 import AuthForm from "../_components/UI/AuthForm";
-import { getSession } from "next-auth/react";
 import { auth } from "../_lib/auth";
 import { redirect } from "next/navigation";
 
