@@ -180,7 +180,7 @@ function SideBar() {
             <DrawerOverlay />
             <DrawerContent>
               <DrawerCloseButton />
-              <DrawerBody>
+              <DrawerBody p={10}>
                 <SearchSidebar brandsList={allBrands} />
               </DrawerBody>
             </DrawerContent>

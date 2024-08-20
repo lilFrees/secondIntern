@@ -42,7 +42,7 @@ async function Page({ params }) {
       <h1 className="mt-10 text-3xl font-bold">{categoryName}</h1>
       <p className="mt-5">{description}</p>
 
-      <div className="flex gap-10 py-10">
+      <div className="flex flex-col gap-5 py-10 md:flex-row md:gap-10">
         <SearchSidebar />
         <SearchProducts category={category} />
       </div>
