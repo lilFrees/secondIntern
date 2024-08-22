@@ -67,6 +67,7 @@ export async function getOrders(): Promise<OrderWithItems[]> {
   const { data: products, error: productsError } = await supabase
     .from("products")
     .select("*")
+    .eq("is_active", true)
     .in(
       "id",
       orderItems.map((item) => item.product_id),

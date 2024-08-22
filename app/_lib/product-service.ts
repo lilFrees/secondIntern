@@ -22,7 +22,8 @@ export async function getProducts(
     const { data, error } = await supabase
       .from("products")
       .select("*")
-      .range(from, to);
+      .range(from, to)
+      .eq("is_active", true);
 
     if (error) throw error;
     return data;
@@ -112,6 +113,7 @@ export async function getProductById(id: number): Promise<IProduct> {
       .from("products")
       .select("*")
       .eq("id", id)
+      .eq("is_active", true)
       .single();
 
     if (error) notFound();
@@ -159,6 +161,7 @@ export async function getProductsByBrands(
     const { data, error } = await supabase
       .from("products")
       .select("*")
+      .eq("is_active", true)
       .in("brand", brands);
 
     if (error) {

@@ -25,6 +25,7 @@ export async function getCartItems(): Promise<ICartItem[]> {
     const items = await supabase
       .from("products")
       .select("*")
+      .eq("is_active", true)
       .in(
         "id",
         data!.map((item) => item.product_id),
