@@ -107,7 +107,7 @@ export async function signInWithGoogle() {
     let { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "https://rfxujkcyzpaqbojdznsb.supabase.co/auth/v1/callback",
+        redirectTo: "/account",
       },
     });
 
@@ -115,13 +115,22 @@ export async function signInWithGoogle() {
       throw error;
     }
 
-    await signIn("google", {
-      redirectTo: "https://rfxujkcyzpaqbojdznsb.supabase.co/auth/v1/callback",
-    });
+    await signIn("google");
 
     return data;
   } catch (error: any) {
     console.error("Error signing in with Google: ", error.message);
+    throw error;
+  }
+}
+
+export async function getCurrentUser() {
+  try {
+    const user = supabase.auth.getUser();
+
+    return user;
+  } catch (error: any) {
+    console.error("Error fetching user: ", error.message);
     throw error;
   }
 }

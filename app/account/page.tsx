@@ -3,12 +3,18 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import OrderList from "../_components/Orders/OrderList";
 import { auth } from "../_lib/auth";
+import { getCurrentUser } from "../_lib/user-service";
+import { supabase } from "../_lib/supabase";
 
 async function Page() {
   const session = await auth();
   if (!session?.user) {
-    redirect("/login");
+    console.log("no session");
   }
+
+  const user = await supabase.auth.getSession();
+
+  console.log(user);
 
   return (
     <div className="py-5">

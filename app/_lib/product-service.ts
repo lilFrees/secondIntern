@@ -57,7 +57,10 @@ export async function fetchFilteredProducts(
 ): Promise<{ data: IProduct[]; dataLength: number; brandList: Set<string> }> {
   const { priceRange, brands, query, category, page = 1 } = filterOptions;
 
-  let supabaseQuery = supabase.from("products").select("*");
+  let supabaseQuery = supabase
+    .from("products")
+    .select("*")
+    .eq("is_active", true);
 
   if (priceRange) {
     supabaseQuery = supabaseQuery
