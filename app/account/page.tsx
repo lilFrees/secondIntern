@@ -9,7 +9,9 @@ import { supabase } from "../_lib/supabase";
 async function Page() {
   const session = await auth();
   if (!session?.user) {
-    console.log("no session");
+    redirect("/login");
+  } else {
+    console.log("error");
   }
 
   const user = await supabase.auth.getSession();

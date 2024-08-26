@@ -1,22 +1,18 @@
 "use client";
 
 import {
-  signInWithGoogle,
+  validateEmail,
+  validateName,
+  validatePassword,
+} from "@/app/_helpers/validate-form";
+import {
   signInWithPassword,
-  signUpWithPassword,
+  signUpWithPassword
 } from "@/app/_lib/user-service";
-import googleIcon from "@/public/google-icon.webp";
 import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
-import { signIn } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import {
-  validateEmail,
-  validatePassword,
-  validateName,
-} from "@/app/_helpers/validate-form";
 
 function AuthForm({ type }: { type: "login" | "register" }) {
   const [email, setEmail] = useState("");
@@ -31,19 +27,6 @@ function AuthForm({ type }: { type: "login" | "register" }) {
 
   function toggleShowPassword() {
     setShowPassword((prev) => !prev);
-  }
-
-  async function submitGoogleHandler(e) {
-    e.preventDefault();
-    try {
-      const data = await signInWithGoogle();
-
-      if (data) {
-        console.log("success");
-      }
-    } catch (error) {
-      console.log("Error signing in with Google ", error);
-    }
   }
 
   async function loginHandler(e) {
@@ -170,24 +153,6 @@ function AuthForm({ type }: { type: "login" | "register" }) {
           {type === "login" ? "Login" : "Register"}
         </Button>
 
-        <div className="flex w-full items-center gap-2">
-          <div className="my-7 h-px flex-grow bg-slate-300" />
-          <p className="w-max text-xs text-slate-500">Or Continue With</p>
-          <div className="my-7 h-px flex-grow bg-slate-300" />
-        </div>
-
-        <Button
-          onClick={submitGoogleHandler}
-          variant="ghost"
-          colorScheme="blue"
-          className="w-full"
-          color="black"
-          leftIcon={
-            <Image height={20} width={20} src={googleIcon} alt="Google" />
-          }
-        >
-          Google
-        </Button>
         <div className="mb-2 mt-5 text-center text-xs text-slate-500">
           {type === "login"
             ? "Don't have an account yet?"

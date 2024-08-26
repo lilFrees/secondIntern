@@ -107,7 +107,7 @@ export async function signInWithGoogle() {
     let { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "/account",
+        redirectTo: `${process.env.NEXT_AUTH_URL}/auth/callback`,
       },
     });
 
@@ -115,7 +115,11 @@ export async function signInWithGoogle() {
       throw error;
     }
 
-    await signIn("google");
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      console.error("No URL returned from Supabase OAuth sign-in");
+    }
 
     return data;
   } catch (error: any) {
