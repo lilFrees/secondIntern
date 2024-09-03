@@ -4,10 +4,10 @@ import AuthForm from "../_components/UI/AuthForm";
 
 const Page = async () => {
   const {
-    data: { session },
+    data: { user },
   } = await readUserSession();
 
-  if (session) redirect("/account");
+  if (user) redirect("/account");
 
   return <AuthForm type="login" />;
 };
