@@ -2,7 +2,9 @@ import { ICartItem } from "../_interfaces/ICartItem";
 import { OrderWithItems } from "../_interfaces/IOrder";
 import { IProduct } from "../_interfaces/IProduct";
 import { clearCart } from "./cart-service";
-import { supabase } from "./supabase";
+import { getSupabaseClient } from "./supabase/client";
+
+const supabase = getSupabaseClient();
 
 export async function addOrder({
   items,

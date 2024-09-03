@@ -1,158 +1,228 @@
 "use client";
 
+import googleIcon from "@/public/google-icon.webp";
 import {
-  validateEmail,
-  validateName,
-  validatePassword,
-} from "@/app/_helpers/validate-form";
-import {
-  signInWithPassword,
-  signUpWithPassword
-} from "@/app/_lib/user-service";
-import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputRightElement,
+  useToast,
+} from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { FieldErrors, useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { z } from "zod";
+import { useUser } from "@/app/_hooks/userStore";
 
-function AuthForm({ type }: { type: "login" | "register" }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+import { signIn, signUpWithEmailNamePassword } from "@/app/_auth/auth-actions";
+import { useRouter } from "next/navigation";
+
+const loginSchema = z.object({
+  email: z.string().email("Invalid email address").min(1, "Email is required"),
+
+  password: z.string().min(8, "Password must be at least 8 characters long"),
+});
+
+const registerSchema = loginSchema.extend({
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .max(50, "Name can't be longer than 50 characters"),
+});
+
+function AuthForm({ type }: { type: "register" | "login" }) {
   const [showPassword, setShowPassword] = useState(false);
+  const { setUser, user } = useUser();
+  const router = useRouter();
+  const toast = useToast();
 
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [credentialsError, setCredentialsError] = useState("");
-  const [nameError, setNameError] = useState("");
+  if (user) {
+    router.push("/");
+  }
+
+  function handleActionResult(
+    actionData: any,
+    error: any,
+    successMessage: string,
+  ) {
+    if (error) {
+      console.log(error);
+      toast({
+        title: "Error 123",
+        description: error.message || error.name,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: successMessage,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      // Handle successful login/registration here (e.g., redirect)
+    }
+  }
+
+  type LoginSchema = z.infer<typeof loginSchema>;
+  type RegisterSchema = z.infer<typeof registerSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isLoading, isSubmitting },
+  } = useForm<LoginSchema | RegisterSchema>({
+    resolver: zodResolver(type === "login" ? loginSchema : registerSchema),
+  });
 
   function toggleShowPassword() {
     setShowPassword((prev) => !prev);
   }
 
-  async function loginHandler(e) {
-    e.preventDefault();
-    if (type === "register") {
-      const emailError = validateEmail(email);
-      const passwordError = validatePassword(password);
-
-      setEmailError(emailError);
-      setPasswordError(passwordError);
-
-      if (emailError || passwordError) {
-        return;
+  async function onSubmit(data: LoginSchema | RegisterSchema) {
+    try {
+      if (type === "login") {
+        const result = await signIn(data as LoginSchema);
+        if (result) {
+          const { data: actionData, error } = JSON.parse(result);
+          handleActionResult(
+            actionData,
+            error,
+            "You have successfully logged in.",
+          );
+          setUser(actionData.user);
+          router.refresh();
+        }
+      } else {
+        const result = await signUpWithEmailNamePassword(
+          data as RegisterSchema,
+        );
+        if (result) {
+          const { data: actionData, error } = JSON.parse(result);
+          handleActionResult(
+            actionData,
+            error,
+            "Account created successfully. Please login again",
+          );
+          router.refresh();
+        }
       }
-    }
-
-    const error = await signInWithPassword(email, password);
-    if (error) {
-      setCredentialsError(error);
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      toast({
+        title: "Unexpected Error",
+        description: "Something went wrong, please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   }
 
-  async function registerHandler(e) {
-    e.preventDefault();
-
-    const emailError = validateEmail(email);
-    const passwordError = validatePassword(password);
-    const nameError = validateName(name);
-
-    setEmailError(emailError);
-    setPasswordError(passwordError);
-    setNameError(nameError);
-
-    if (emailError || passwordError || nameError) {
-      return;
-    }
-
-    const error = await signUpWithPassword(email, password, name);
+  function isRegisterSchema(
+    errors: FieldErrors<LoginSchema | RegisterSchema>,
+  ): errors is FieldErrors<RegisterSchema> {
+    return type === "register";
   }
 
   return (
     <div className="mx-auto flex h-screen max-w-lg flex-col items-center justify-center">
       <form
         className="mb-5 w-full rounded bg-white p-8 shadow-xl"
-        onSubmit={type === "login" ? loginHandler : registerHandler}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <h2 className="mb-8 text-center text-2xl font-bold">
           {type === "login" ? "Login to your account" : "Create an Account"}
         </h2>
         {type === "register" && (
           <div className="mb-4">
-            <label
-              className="mb-2 block text-sm font-bold text-gray-700"
-              htmlFor="name"
-            >
-              Your name:
-            </label>
-            <Input
-              id="name"
-              type="name"
-              name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              isInvalid={nameError !== ""}
-              errorBorderColor={passwordError !== "" ? "crimson" : ""}
-            />
-            {nameError && (
-              <p className="mt-1 text-sm text-red-500">{nameError}</p>
-            )}
+            <FormControl isInvalid={!!errors.email}>
+              <FormLabel
+                className="mb-2 block text-sm font-bold text-gray-700"
+                htmlFor="name"
+              >
+                Your name:
+              </FormLabel>
+              <Input id="name" type="name" {...register("name")} />
+              <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+            </FormControl>
           </div>
         )}
         <div className="mb-4">
-          <label
-            className="mb-2 block text-sm font-bold text-gray-700"
-            htmlFor="email"
-          >
-            Email:
-          </label>
-          <Input
-            id="email"
-            type="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            isInvalid={emailError !== ""}
-            errorBorderColor={passwordError !== "" ? "crimson" : ""}
-          />
-          {emailError && (
-            <p className="mt-1 text-sm text-red-500">{emailError}</p>
-          )}
+          <FormControl isInvalid={!!errors.email}>
+            <FormLabel
+              className="mb-2 block text-sm font-bold text-gray-700"
+              htmlFor="email"
+            >
+              Email:
+            </FormLabel>
+            <Input id="email" type="email" {...register("email")} />
+            <FormErrorMessage>
+              {isRegisterSchema(errors) && errors.name?.message}
+            </FormErrorMessage>
+          </FormControl>
         </div>
         <div className="mb-4">
-          <label
-            className="mb-2 block text-sm font-bold text-gray-700"
-            htmlFor="password"
-          >
-            Password:
-          </label>
-          <InputGroup>
-            <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              isInvalid={passwordError !== ""}
-              errorBorderColor={passwordError !== "" ? "crimson" : ""}
-            />
-            <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={toggleShowPassword}>
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-          {passwordError && (
-            <p className="mt-1 text-sm text-red-500">{passwordError}</p>
-          )}
+          <FormControl isInvalid={!!errors.password}>
+            <label
+              className="mb-2 block text-sm font-bold text-gray-700"
+              htmlFor="password"
+            >
+              Password:
+            </label>
+            <InputGroup>
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                {...register("password")}
+              />
+              <InputRightElement width="4.5rem">
+                <Button h="1.75rem" size="sm" onClick={toggleShowPassword}>
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+            <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+          </FormControl>
         </div>
-        {credentialsError && (
-          <p className="mt-1 text-sm text-red-500">{credentialsError}</p>
-        )}
+        <FormErrorMessage>{errors.root?.message}</FormErrorMessage>
         <div className="mb-4"></div>
-        <Button colorScheme="green" type="submit" className="w-full">
+        <Button
+          colorScheme="green"
+          type="submit"
+          isLoading={isSubmitting}
+          className="w-full"
+          onClick={handleSubmit(onSubmit)}
+        >
           {type === "login" ? "Login" : "Register"}
         </Button>
 
+        <div className="flex w-full items-center gap-2">
+          <div className="my-7 h-px flex-grow bg-slate-300" />
+          <p className="w-max text-xs text-slate-500">Or Continue With</p>
+          <div className="my-7 h-px flex-grow bg-slate-300" />
+        </div>
+
+        <Button
+          variant="ghost"
+          colorScheme="blue"
+          className="w-full"
+          color="black"
+          type="button"
+          leftIcon={
+            <Image height={20} width={20} src={googleIcon} alt="Google" />
+          }
+        >
+          Google
+        </Button>
         <div className="mb-2 mt-5 text-center text-xs text-slate-500">
           {type === "login"
             ? "Don't have an account yet?"

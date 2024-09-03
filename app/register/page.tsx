@@ -1,13 +1,13 @@
-import AuthForm from "../_components/UI/AuthForm";
-import { auth } from "../_lib/auth";
 import { redirect } from "next/navigation";
+import { readUserSession } from "../_auth/readUserSession";
+import AuthForm from "../_components/UI/AuthForm";
 
 const Page = async () => {
-  const session = await auth();
-  if (session?.user) {
-    redirect("/account");
-  }
+  const {
+    data: { user },
+  } = await readUserSession();
 
+  if (user) redirect("/account");
   return <AuthForm type="register" />;
 };
 

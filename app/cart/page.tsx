@@ -1,7 +1,6 @@
 "use client";
 import { clearCart } from "@/app/_lib/cart-service";
 import { Button, Spinner } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { FaRegCircleXmark } from "react-icons/fa6";
 import CartCheckout from "../_components/Cart/CartCheckout";
 import CartList from "../_components/Cart/CartList";
@@ -9,13 +8,14 @@ import EmptyState from "../_components/UI/EmptyState";
 import UnauthorizedState from "../_components/UI/UnauthorizedState";
 import useCart from "../_hooks/useCart";
 import useScreenSize from "../_hooks/useScreenSize";
+import { useUser } from "../_hooks/userStore";
 
 function Page() {
-  const session = useSession();
+  const { user } = useUser();
   const { cart, cartIdArray, mounted } = useCart();
   const { width } = useScreenSize();
 
-  if (session.status === "unauthenticated") {
+  if (!user) {
     return <UnauthorizedState text="Please login to view your cart" />;
   }
 
@@ -27,7 +27,7 @@ function Page() {
     );
   }
 
-  if (cartIdArray.length === 0 && session.status === "authenticated") {
+  if (cartIdArray.length === 0) {
     return <EmptyState text="Your cart seems to be empty 😔" />;
   }
 

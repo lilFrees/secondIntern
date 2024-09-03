@@ -22,7 +22,6 @@ import {
   Spinner,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -33,20 +32,17 @@ import { IoIosClose } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
 import Logo from "../Logo/Logo";
 import useScreenSize from "@/app/_hooks/useScreenSize";
-
-async function fetchCategories() {
-  const data = await getCategoryList();
-  return data;
-}
+import { useUser } from "@/app/_hooks/userStore";
 
 function Navigation() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef(null);
   const { query, updateQuery } = useSearchQuery();
   const [category, setCategory] = useState<any[]>([]);
-  const { data, status } = useSession();
+  const { user } = useUser();
   const [width, setWidth] = useState(0);
   const screenWidth = useScreenSize()!;
+
   useEffect(() => {
     setWidth(screenWidth.width);
   }, [screenWidth]);
@@ -57,7 +53,7 @@ function Navigation() {
       variant="ghost"
       className="!hidden shrink-0 md:!inline"
     >
-      <Spinner colorScheme="green" />
+      Login
     </Button>,
   );
 
@@ -65,14 +61,15 @@ function Navigation() {
   const { wishlistIdArray } = useWishlist();
 
   const cartCount = cartIdArray.length;
+  const wishCount = wishlistIdArray.length;
   useEffect(() => {
-    if (status === "authenticated") {
+    if (user) {
       AccountButton.current = (
         <Link href="/account" className="!hidden shrink-0 md:!inline">
           <Button colorScheme="green">Your Profile</Button>
         </Link>
       );
-    } else if (status === "unauthenticated") {
+    } else {
       AccountButton.current = (
         <Link href="/login" className="!hidden shrink-0 md:!inline">
           <Button colorScheme="green" variant="ghost">
@@ -80,20 +77,12 @@ function Navigation() {
           </Button>
         </Link>
       );
-    } else {
-      AccountButton.current = (
-        <Button
-          colorScheme="green"
-          variant="ghost"
-          className="!hidden shrink-0 md:!inline"
-        >
-          <Spinner colorScheme="green" />
-        </Button>
-      );
     }
+  }, [user]);
 
-    fetchCategories().then((data) => setCategory(data));
-  }, [data, status]);
+  useEffect(() => {
+    getCategoryList().then((data) => setCategory(data));
+  }, []);
 
   const router = useRouter();
 
@@ -156,7 +145,7 @@ function Navigation() {
                 icon={<HiOutlineShoppingCart />}
                 variant="ghost"
               />
-              {cartCount > 0 && (
+              {user && cartCount > 0 && (
                 <div className="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-green-600 text-xs text-white">
                   {cartCount}
                 </div>
@@ -170,9 +159,9 @@ function Navigation() {
                 icon={<FaRegHeart />}
                 variant="ghost"
               />
-              {wishlistIdArray.length > 0 && (
+              {user && wishCount > 0 && (
                 <div className="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-green-600 text-xs text-white">
-                  {wishlistIdArray.length}
+                  {wishCount}
                 </div>
               )}
             </Box>
@@ -219,7 +208,7 @@ function Navigation() {
           <Link href="/cart">
             <Box className="relative inline-block">
               <HiOutlineShoppingCart fontSize={35} />
-              {cartCount > 0 && (
+              {user && cartCount > 0 && (
                 <div className="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-green-600 text-xs text-white">
                   {cartCount}
                 </div>
@@ -230,15 +219,15 @@ function Navigation() {
           <Link href="/favorite">
             <Box className="relative inline-block">
               <FaRegHeart fontSize={35} />
-              {wishlistIdArray.length > 0 && (
+              {user && wishCount > 0 && (
                 <div className="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-green-600 text-xs text-white">
-                  {wishlistIdArray.length}
+                  {wishCount}
                 </div>
               )}
             </Box>
             <span className="text-xs">Favorites</span>
           </Link>
-          <Link href={status === "authenticated" ? "/account" : "/login"}>
+          <Link href={user ? "/account" : "/login"}>
             <MdAccountCircle fontSize={35} />
             <span className="text-xs">Account</span>
           </Link>

@@ -1,18 +1,26 @@
 import { IProduct } from "../_interfaces/IProduct";
-import { supabase } from "./supabase";
+import { getSupabaseClient } from "./supabase/client";
 
 const wishlistChannel = new BroadcastChannel("wishlist");
 
+const supabase = getSupabaseClient();
+
 export async function getWishlist(): Promise<IProduct[]> {
   try {
-    const userId = (await supabase.auth.getUser()).data.user?.id;
-    if (!userId) {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+    if (!user) {
       return [];
     }
+
+    if (userError) throw userError;
+
     const { data, error } = await supabase
       .from("favorite_items")
       .select("product_id")
-      .eq("user_id", userId);
+      .eq("user_id", user.id);
 
     if (data?.length === 0) {
       return [];
@@ -36,12 +44,19 @@ export async function getWishlist(): Promise<IProduct[]> {
 
 export async function addItemToWishlist(id: number) {
   try {
-    const userId = (await supabase.auth.getUser()).data.user?.id;
-    if (!userId) {
-      return null;
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      throw new Error("No user");
     }
+
+    if (userError) throw userError.message;
+
     const { data, error } = await supabase.from("favorite_items").insert({
-      user_id: userId,
+      user_id: user.id,
       product_id: id,
     });
 
@@ -55,14 +70,21 @@ export async function addItemToWishlist(id: number) {
 
 export async function removeItemFromWishlist(id: number) {
   try {
-    const userId = (await supabase.auth.getUser()).data.user?.id;
-    if (!userId) {
-      return null;
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      throw new Error("No user");
     }
+
+    if (userError) throw userError.message;
+
     const { data, error } = await supabase
       .from("favorite_items")
       .delete()
-      .eq("user_id", userId)
+      .eq("user_id", user.id)
       .eq("product_id", id);
 
     if (!error) {

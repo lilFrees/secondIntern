@@ -1,17 +1,16 @@
 /**
  * Base URL for the product API.
  */
-const BASE_URL = "https://dummyjson.com/products";
 
-import { notFound } from "next/navigation";
-import { supabase } from "./supabase";
 import { IProduct } from "../_interfaces/IProduct";
+import { getSupabaseClient } from "./supabase/client";
 
 /**
  * Retrieves all products from the database.
  * @returns A promise that resolves to an array of products.
  * @throws If there is an error fetching the products.
  */
+const supabase = getSupabaseClient();
 export async function getProducts(
   page: number = 1,
   limit: number = 20,
@@ -84,7 +83,9 @@ export async function fetchFilteredProducts(
 
   const { data, error } = await supabaseQuery;
 
-  const brandList = new Set(data!.map((product: IProduct) => product.brand));
+  const brandList = new Set<string>(
+    data!.map((product: IProduct) => product.brand),
+  );
   if (!brands?.length) {
     brandChannel.postMessage({
       type: "UPDATE",
@@ -119,7 +120,7 @@ export async function getProductById(id: number): Promise<IProduct> {
       .eq("is_active", true)
       .single();
 
-    if (error) notFound();
+    if (error) throw error;
     return data;
   } catch (error: any) {
     console.error(`Error fetching product with ID ${id}:`, error.message);
@@ -132,14 +133,25 @@ export async function getProductById(id: number): Promise<IProduct> {
  * @returns A promise that resolves to the list of categories.
  * @throws If there is an error fetching the categories.
  */
-export async function getCategoryList(): Promise<any> {
+export async function getCategoryList(): Promise<
+  {
+    id: number;
+    name: string;
+    description: string;
+    slug: string;
+  }[]
+> {
   try {
-    const req = await fetch(`${BASE_URL}/categories`);
-    const data = await req.json();
+    const { data, error } = await supabase
+      .from("categories")
+      .select("id,name,description,slug")
+      .order("id", { ascending: true });
+    if (error) throw error;
+
     return data;
   } catch (error) {
     console.log(error);
-    notFound();
+    throw new Error("Error fetching categories");
   }
 }
 
@@ -186,24 +198,18 @@ export async function getProductsByBrands(
  */
 export async function getProductsByCategory(category: string): Promise<any> {
   try {
-    const req = await fetch(`${BASE_URL}/category/${category}`);
-    const data = await req.json();
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("category", category);
+
+    if (error) throw error;
+
     return data;
   } catch (error) {
     console.error(error);
-    notFound();
+    throw new Error("Error fetching products by category");
   }
-}
-
-/**
- * Retrieves the name of a category.
- * @param cat - The category slug.
- * @returns A promise that resolves to the name of the category.
- */
-export async function getCategoryName(cat: string): Promise<string> {
-  const allCategories = await getCategoryList();
-  const name = await allCategories.find((el) => el.slug === cat);
-  return name.name;
 }
 
 /**
@@ -216,11 +222,17 @@ export async function getRecommendedByCategory(
   category: string,
 ): Promise<IProduct[]> {
   try {
-    const req = await fetch(`${BASE_URL}/category/${category}?limit=40`);
-    const data = await req.json();
-    return data.products;
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("category", category)
+      .limit(4);
+
+    if (error) throw error;
+
+    return data;
   } catch (error) {
     console.error(error);
-    notFound();
+    throw new Error("Error fetching recommended products by category");
   }
 }

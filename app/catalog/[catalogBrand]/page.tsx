@@ -1,25 +1,41 @@
 import SearchProducts from "@/app/_components/SearchResults/SearchProducts";
 import SearchSidebar from "@/app/_components/SearchResults/SearchSidebar";
 import descriptions from "@/app/_data/categoryDescriptions.json";
-import { getCategoryName } from "@/app/_lib/product-service";
+import { getCategoryList } from "@/app/_lib/product-service";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const category = params.catalogBrand;
-  const categoryName = await getCategoryName(category);
-  const description = descriptions.descriptions[category];
+
+  const fetchedCategory = await getCategoryList().then((categories) =>
+    categories.find((c) => c.slug === category),
+  );
+
+  if (!fetchedCategory) {
+    notFound();
+  }
+
+  const { name, description } = fetchedCategory;
 
   return {
-    title: `${categoryName} - Green Haven Store`,
-    description: description || `Explore our ${categoryName} collection`,
+    title: `${name} - Green Haven Store`,
+    description: description || `Explore our ${name} collection`,
   };
 }
 
 async function Page({ params }) {
   const category = params.catalogBrand;
-  const categoryName = await getCategoryName(category);
-  const description = descriptions.descriptions[category];
+  const categoryList = await getCategoryList();
+
+  const fetchedCategory = categoryList.find((c) => c.slug === category);
+
+  if (!fetchedCategory) {
+    notFound();
+  }
+
+  const { name, description } = fetchedCategory;
 
   return (
     <div className="py-5">
@@ -33,18 +49,16 @@ async function Page({ params }) {
         </BreadcrumbItem>
 
         <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href={`/catalog/${category}`}>
-            {categoryName}
-          </BreadcrumbLink>
+          <BreadcrumbLink href={`/catalog/${category}`}>{name}</BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
 
-      <h1 className="mt-10 text-3xl font-bold">{categoryName}</h1>
+      <h1 className="mt-10 text-3xl font-bold">{name}</h1>
       <p className="mt-5">{description}</p>
 
       <div className="flex flex-col gap-5 py-10 md:flex-row md:gap-10">
         <SearchSidebar />
-        <SearchProducts category={category} />
+        <SearchProducts category={fetchedCategory.slug} />
       </div>
     </div>
   );
