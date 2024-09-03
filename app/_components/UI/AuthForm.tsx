@@ -36,7 +36,7 @@ const registerSchema = loginSchema.extend({
     .max(50, "Name can't be longer than 50 characters"),
 });
 
-function AuthForm({ type }: { type: "login" | "register" }) {
+function AuthForm({ type }: { type: "register" | "login" }) {
   const [showPassword, setShowPassword] = useState(false);
   const { setUser, user } = useUser();
   const router = useRouter();
