@@ -1,11 +1,14 @@
+import { redirect } from "next/navigation";
+import { readUserSession } from "../_auth/readUserSession";
 import AuthForm from "../_components/UI/AuthForm";
-import { auth } from "../_lib/auth";
 
 const Page = async () => {
-  const session = await auth();
-  if (session?.user) {
-    console.log("session", session);
-  }
+  const {
+    data: { session },
+  } = await readUserSession();
+
+  if (session) redirect("/account");
+
   return <AuthForm type="login" />;
 };
 

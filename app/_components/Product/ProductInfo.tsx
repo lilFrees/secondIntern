@@ -24,20 +24,17 @@ import StarRating from "../UI/StarRating";
 import { useState } from "react";
 import useWishlist from "@/app/_hooks/useWishlist";
 import useCart from "@/app/_hooks/useCart";
-import { useSession } from "next-auth/react";
-import { auth } from "@/app/_lib/auth";
-import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useUser } from "@/app/_hooks/userStore";
 
 function ProductInfo({ product }: { product: IProduct }) {
   const [quantity, setQuantity] = useState<number>(1);
   const { cart, cartIdArray } = useCart();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const router = useRouter();
 
-  const { status, data } = useSession();
+  const { user } = useUser();
 
   function handleQuantityChange(value: number) {
     setQuantity(value);
@@ -72,7 +69,7 @@ function ProductInfo({ product }: { product: IProduct }) {
           flexGrow={1}
           leftIcon={<TiShoppingCart />}
           onClick={() => {
-            if (status === "unauthenticated") {
+            if (user) {
               onOpen();
             } else if (isInCart) {
               updateCartItem(product.id, quantity);

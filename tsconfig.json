@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/_lib/supabase.js",
+    "app/_lib/supabase.ts",
     "app/locations/page.tsx"
   ],
   "exclude": ["node_modules"]

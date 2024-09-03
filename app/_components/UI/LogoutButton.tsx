@@ -1,18 +1,27 @@
 "use client";
 
-import { supabase } from "@/app/_lib/supabase";
+import { getSupabaseClient } from "@/app/_lib/supabase/client";
 import { Button } from "@chakra-ui/react";
-import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { signOut } from "@/app/_auth/auth-actions";
+import { useUser } from "@/app/_hooks/userStore";
+
+const supabase = getSupabaseClient();
 
 function LogoutButton() {
+  const router = useRouter();
+  const { clearUser } = useUser();
   async function logoutHandler() {
     try {
-      const { error } = await supabase.auth.signOut({ scope: "local" });
+      const result = await signOut();
 
-      if (!error) {
-        await signOut({
-          callbackUrl: "/login",
-        });
+      if (result) {
+        const { error } = JSON.parse(result);
+
+        if (!error) {
+          clearUser();
+          router.refresh();
+        }
       }
     } catch (error) {
       console.log("Error logging out:", error);

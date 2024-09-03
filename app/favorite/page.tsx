@@ -7,16 +7,16 @@ import EmptyState from "../_components/UI/EmptyState";
 import useWishlist from "../_hooks/useWishlist";
 import { clearWishlist } from "../_lib/wishlist-service";
 import useCart from "../_hooks/useCart";
-import { useSession } from "next-auth/react";
 import UnauthorizedState from "../_components/UI/UnauthorizedState";
+import { useUser } from "../_hooks/userStore";
 
 function Page() {
-  const session = useSession();
+  const { user } = useUser();
 
   const { wishlist, wishlistIdArray, loading } = useWishlist();
   const { cartIdArray } = useCart();
 
-  if (!session.data) {
+  if (!user) {
     return <UnauthorizedState text="Please login to see your wishlist" />;
   }
 

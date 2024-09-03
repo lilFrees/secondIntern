@@ -85,7 +85,7 @@ export function CartProvider({ children }) {
     return () => {
       cartChannel.close();
     };
-  }, []);
+  }, [toast]);
 
   return (
     <CartContext.Provider

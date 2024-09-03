@@ -1,7 +1,9 @@
 import { ICartItem } from "../_interfaces/ICartItem";
-import { supabase } from "./supabase";
+import { getSupabaseClient } from "./supabase/client";
 
 const cartChanel = new BroadcastChannel("cart");
+
+const supabase = getSupabaseClient();
 
 export async function getCartItems(): Promise<ICartItem[]> {
   try {

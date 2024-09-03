@@ -25,7 +25,7 @@ import womendress from "@/public/categories/women-dress.webp";
 import jewelry from "@/public/categories/womens-jewelry.jpg";
 import womenshoes from "@/public/categories/womens-shoes.jpg";
 import womenwatch from "@/public/categories/womens-watches.jpg";
-import Link from "next/link";
+import CategoryCard from "./CategoryCard";
 
 const bgImages = [
   beauty,
@@ -37,12 +37,12 @@ const bgImages = [
   laptops,
   menshirts,
   menshoes,
+  sport,
   menwatch,
   mobile,
   motor,
-  skincare,
   phones,
-  sport,
+  skincare,
   sunglasses,
   tablets,
   tops,
@@ -68,23 +68,3 @@ async function CategoriesList({ preview }: { preview?: boolean }) {
 }
 
 export default CategoriesList;
-
-function CategoryCard({ cat, image }) {
-  return (
-    <Link
-      href={`/catalog/${cat.slug}`}
-      className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-slate-200"
-    >
-      <Image
-        src={image}
-        alt="Beauty products"
-        placeholder="blur"
-        sizes="(max-width: 768px) 50vw, 25vw"
-        className="absolute z-10 object-cover transition-all duration-300 hover:scale-110"
-        fill
-      />
-      <div className="absolute inset-0 z-[15] bg-white/70"></div>
-      <div className="z-20 text-xl font-bold">{cat.name}</div>
-    </Link>
-  );
-}
