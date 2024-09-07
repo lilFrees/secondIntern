@@ -21,6 +21,7 @@ export async function getProducts(
     const { data, error } = await supabase
       .from("products")
       .select("*")
+      .order("id", { ascending: true })
       .range(from, to)
       .eq("is_active", true);
 
