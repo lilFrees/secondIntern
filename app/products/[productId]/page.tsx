@@ -37,7 +37,7 @@ async function Page({ params }) {
           <BreadcrumbLink href="#">{product.title}</BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <div className="grid grid-cols-2 py-10">
+      <div className="grid grid-cols-2 gap-5 py-10">
         <Suspense fallback={<Spinner colorScheme="green" />}>
           <ProductImagePicker images={product.images} title={product.title} />
         </Suspense>
