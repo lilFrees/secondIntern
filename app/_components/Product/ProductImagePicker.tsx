@@ -6,7 +6,7 @@ import { Suspense, useState } from "react";
 function ProductImagePicker({ images, title }) {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   return (
-    <div className="flex">
+    <div className="flex gap-2">
       <div className="flex flex-col gap-1">
         {images.map((img, i) => (
           <button
