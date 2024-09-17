@@ -33,8 +33,8 @@ function ProductInfo({ product }: { product: IProduct }) {
   const { cart, cartIdArray } = useCart();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-
   const { user } = useUser();
+  console.log(user);
 
   function handleQuantityChange(value: number) {
     setQuantity(value);
@@ -44,10 +44,6 @@ function ProductInfo({ product }: { product: IProduct }) {
 
   const isFavorite = wishlistIdArray.includes(product.id);
   const isInCart = cartIdArray.includes(product.id);
-
-  const currentQuantity = cart.find(
-    (item) => item.item.id === product.id,
-  )?.quantity;
 
   return (
     <div className="flex flex-col gap-5">
@@ -69,7 +65,7 @@ function ProductInfo({ product }: { product: IProduct }) {
           flexGrow={1}
           leftIcon={<TiShoppingCart />}
           onClick={() => {
-            if (user) {
+            if (!user) {
               onOpen();
             } else if (isInCart) {
               updateCartItem(product.id, quantity);

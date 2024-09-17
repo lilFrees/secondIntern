@@ -3,7 +3,6 @@
 import { IProduct } from "@/app/_interfaces/IProduct";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import ReviewItem from "../Reviews/ReviewItem";
 import ReviewList from "../Reviews/ReviewList";
 
 function ProductDescription({ product }: { product: IProduct }) {
