@@ -112,21 +112,16 @@ export async function fetchFilteredProducts(
  * @returns A promise that resolves to the product with the specified ID.
  * @throws If there is an error fetching the product.
  */
-export async function getProductById(id: number): Promise<IProduct> {
-  try {
-    const { data, error } = await supabase
-      .from("products")
-      .select("*")
-      .eq("id", id)
-      .eq("is_active", true)
-      .single();
+export async function getProductById(id: number): Promise<IProduct | null> {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("id", id)
+    .eq("is_active", true)
+    .single();
 
-    if (error) throw error;
-    return data;
-  } catch (error: any) {
-    console.error(`Error fetching product with ID ${id}:`, error.message);
-    throw error;
-  }
+  if (error) return null;
+  return data;
 }
 
 /**

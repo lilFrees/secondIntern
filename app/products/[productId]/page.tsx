@@ -11,13 +11,19 @@ import ProductInfo from "../../_components/Product/ProductInfo";
 import { IProduct } from "../../_interfaces/IProduct";
 import { getProductById } from "../../_lib/product-service";
 import RecommendedList from "../../_components/Recommended/RecommendedList";
+import { notFound } from "next/navigation";
 
 function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 async function Page({ params }) {
-  const product: IProduct = await getProductById(+params.productId);
+  const product = await getProductById(+params.productId);
+  console.log(product);
+
+  if (!product) {
+    notFound();
+  }
 
   return (
     <div className="">

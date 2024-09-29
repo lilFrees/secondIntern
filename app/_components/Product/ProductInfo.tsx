@@ -34,7 +34,6 @@ function ProductInfo({ product }: { product: IProduct }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const { user } = useUser();
-  console.log(user);
 
   function handleQuantityChange(value: number) {
     setQuantity(value);
