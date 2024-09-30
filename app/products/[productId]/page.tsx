@@ -4,14 +4,13 @@ import {
   BreadcrumbLink,
   Spinner,
 } from "@chakra-ui/react";
-import { Suspense } from "react";
-import ProductDescription from "../../_components/Product/ProductDescription";
-import ProductImagePicker from "../../_components/Product/ProductImagePicker";
-import ProductInfo from "../../_components/Product/ProductInfo";
-import { IProduct } from "../../_interfaces/IProduct";
-import { getProductById } from "../../_lib/product-service";
-import RecommendedList from "../../_components/Recommended/RecommendedList";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import ProductDescription from "../../_features/product/components/ProductDescription";
+import ProductImagePicker from "../../_features/product/components/ProductImagePicker";
+import ProductInfo from "../../_features/product/components/ProductInfo";
+import RecommendedList from "../../_features/product/components/RecommendedList";
+import { getProductById } from "@/app/_features/product/services/product-service";
 
 function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -19,7 +18,6 @@ function capitalizeFirstLetter(string: string) {
 
 async function Page({ params }) {
   const product = await getProductById(+params.productId);
-  console.log(product);
 
   if (!product) {
     notFound();

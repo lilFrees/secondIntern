@@ -1,4 +1,4 @@
-import CategoriesList from "../_components/Categories/CategoriesList";
+import CategoriesList from "../_features/categories/components/CategoriesList";
 
 function Page() {
   return (

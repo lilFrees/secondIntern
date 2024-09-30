@@ -1,7 +1,7 @@
-import LogoutButton from "@/app/_components/UI/LogoutButton";
+import LogoutButton from "@/app/_shared/components/LogoutButton";
 import { Suspense } from "react";
-import { readUserSession } from "../_auth/readUserSession";
-import OrderList from "../_components/Orders/OrderList";
+import { readUserSession } from "../_features/auth/services/readUserSession";
+import OrderList from "../_features/orders/components/OrderList";
 
 async function Page() {
   const {

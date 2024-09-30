@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { readUserSession } from "../_auth/readUserSession";
-import AuthForm from "../_components/UI/AuthForm";
+import { readUserSession } from "../_features/auth/services/readUserSession";
+import AuthForm from "../_features/auth/components/AuthForm";
 
 const Page = async () => {
   const {

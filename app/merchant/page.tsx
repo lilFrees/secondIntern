@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import MerchantForm from "../_components/MerchantForm/MerchantForm";
+import MerchantForm from "../_features/merchant/components/MerchantForm";
 import image from "@/public/handshake.jpg";
 import { Badge } from "@chakra-ui/react";
 

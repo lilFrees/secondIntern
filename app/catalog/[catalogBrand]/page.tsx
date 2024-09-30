@@ -1,7 +1,6 @@
-import SearchProducts from "@/app/_components/SearchResults/SearchProducts";
-import SearchSidebar from "@/app/_components/SearchResults/SearchSidebar";
-import descriptions from "@/app/_data/categoryDescriptions.json";
-import { getCategoryList } from "@/app/_lib/product-service";
+import { getCategoryList } from "@/app/_features/product/services/product-service";
+import SearchProducts from "@/app/_features/search/components/SearchProducts";
+import SearchSidebar from "@/app/_features/search/components/SearchSidebar";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";

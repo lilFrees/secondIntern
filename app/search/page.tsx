@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import SearchProducts from "../_components/SearchResults/SearchProducts";
-import SearchSidebar from "../_components/SearchResults/SearchSidebar";
+import SearchProducts from "../_features/search/components/SearchProducts";
+import SearchSidebar from "../_features/search/components/SearchSidebar";
 
 async function Page({ searchParams }) {
   if (!searchParams.query) {

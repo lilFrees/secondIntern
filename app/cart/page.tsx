@@ -1,14 +1,14 @@
 "use client";
-import { clearCart } from "@/app/_lib/cart-service";
 import { Button, Spinner } from "@chakra-ui/react";
 import { FaRegCircleXmark } from "react-icons/fa6";
-import CartCheckout from "../_components/Cart/CartCheckout";
-import CartList from "../_components/Cart/CartList";
-import EmptyState from "../_components/UI/EmptyState";
-import UnauthorizedState from "../_components/UI/UnauthorizedState";
-import useCart from "../_hooks/useCart";
-import useScreenSize from "../_hooks/useScreenSize";
-import { useUser } from "../_hooks/userStore";
+import CartCheckout from "../_features/cart/components/CartCheckout";
+import CartList from "../_features/cart/components/CartList";
+import EmptyState from "../_shared/components/EmptyState";
+import UnauthorizedState from "../_shared/components/UnauthorizedState";
+import useScreenSize from "../_shared/hooks/useScreenSize";
+import useCart from "../_features/cart/hooks/useCart";
+import { useUser } from "../_features/auth/hooks/userStore";
+import { clearCart } from "../_features/cart/services/cart-service";
 
 function Page() {
   const { user } = useUser();
