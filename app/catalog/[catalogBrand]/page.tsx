@@ -8,9 +8,13 @@ import { notFound } from "next/navigation";
 export async function generateMetadata({ params }): Promise<Metadata> {
   const category = params.catalogBrand;
 
-  const fetchedCategory = await getCategoryList().then((categories) =>
-    categories.find((c) => c.slug === category),
-  );
+  const fetchedCategory = await getCategoryList().then((categories) => {
+    if (!categories) {
+      notFound();
+    }
+
+    return categories.find((c) => c.slug === category);
+  });
 
   if (!fetchedCategory) {
     notFound();
@@ -28,7 +32,13 @@ async function Page({ params }) {
   const category = params.catalogBrand;
   const categoryList = await getCategoryList();
 
-  const fetchedCategory = categoryList.find((c) => c.slug === category);
+  const fetchedCategory = await getCategoryList().then((categories) => {
+    if (!categories) {
+      notFound();
+    }
+
+    return categories.find((c) => c.slug === category);
+  });
 
   if (!fetchedCategory) {
     notFound();
