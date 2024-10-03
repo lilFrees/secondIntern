@@ -1,44 +1,37 @@
 "use client";
 
+import { useUser } from "@/app/_features/auth/hooks/userStore";
+import useCart from "@/app/_features/cart/hooks/useCart";
+import useWishlist from "@/app/_features/favorites/hooks/useWishlist";
 import { useSearchQuery } from "@/app/_features/search/hooks/useSearchQuery";
-import { MdAccountCircle } from "react-icons/md";
-import { RiMenuSearchLine } from "react-icons/ri";
+import useScreenSize from "@/app/_shared/hooks/useScreenSize";
 import {
   Box,
   Button,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
   IconButton,
   Input,
   InputGroup,
   InputRightElement,
-  Spinner,
   useDisclosure,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { lazy, useEffect, useRef, useState } from "react";
 import { FaRegHeart } from "react-icons/fa";
 import { FaBars } from "react-icons/fa6";
 import { HiOutlineShoppingCart } from "react-icons/hi2";
 import { IoIosClose } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
+import { MdAccountCircle } from "react-icons/md";
+import { RiMenuSearchLine } from "react-icons/ri";
 import Logo from "../../_shared/components/Logo";
-import useScreenSize from "@/app/_shared/hooks/useScreenSize";
-import { useUser } from "@/app/_features/auth/hooks/userStore";
-import useCart from "@/app/_features/cart/hooks/useCart";
-import useWishlist from "@/app/_features/favorites/hooks/useWishlist";
-import { getCategoryList } from "@/app/_features/product/services/product-service";
+
+const NavLinks = lazy(() => import("../components/NavLinks"));
 
 function Navigation() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef(null);
   const { query, updateQuery } = useSearchQuery();
-  const [category, setCategory] = useState<any[]>([]);
   const { user } = useUser();
   const [width, setWidth] = useState(0);
   const screenWidth = useScreenSize()!;
@@ -79,10 +72,6 @@ function Navigation() {
       );
     }
   }, [user]);
-
-  useEffect(() => {
-    getCategoryList().then((data) => setCategory(data));
-  }, []);
 
   const router = useRouter();
 
@@ -169,31 +158,8 @@ function Navigation() {
           {/* ACCOUNT BUTTON */}
           {AccountButton.current}
 
-          <Drawer
-            isOpen={isOpen}
-            onClose={onClose}
-            finalFocusRef={btnRef}
-            placement="left"
-            size="lg"
-            preserveScrollBarGap={true}
-          >
-            <DrawerOverlay />
-            <DrawerContent>
-              <DrawerCloseButton />
-              <DrawerHeader>Catalog</DrawerHeader>
-              <DrawerBody className="flex flex-col gap-2">
-                {category.map((cat, i) => (
-                  <Link
-                    href={`/catalog/${cat.slug}`}
-                    key={i}
-                    onClick={() => setTimeout(onClose, 500)}
-                  >
-                    {cat.name}
-                  </Link>
-                ))}
-              </DrawerBody>
-            </DrawerContent>
-          </Drawer>
+          {/* DRAWER */}
+          <NavLinks btnRef={btnRef} isOpen={isOpen} onClose={onClose} />
         </>
         {/* BOTTOM NAV */}
         <div className="fixed bottom-0 left-0 flex h-14 w-full items-center border-t border-slate-300 bg-white *:flex *:flex-1 *:flex-col *:items-center md:hidden">

@@ -130,26 +130,25 @@ export async function getProductById(id: number): Promise<IProduct | null> {
  * @throws If there is an error fetching the categories.
  */
 export async function getCategoryList(): Promise<
-  {
-    id: number;
-    name: string;
-    description: string;
-    image: string;
-    slug: string;
-  }[]
+  | {
+      id: number;
+      name: string;
+      description: string;
+      image: string;
+      slug: string;
+    }[]
+  | null
 > {
-  try {
-    const { data, error } = await supabase
-      .from("categories")
-      .select("id,name,description,slug,image")
-      .order("id", { ascending: true });
-    if (error) throw error;
-
-    return data;
-  } catch (error) {
-    console.log(error);
-    throw new Error("Error fetching categories");
+  const { data, error } = await supabase
+    .from("categories")
+    .select("*")
+    .order("id", { ascending: true });
+  if (error) {
+    console.error("Error fetching categories:", error.message);
+    return null;
   }
+
+  return data;
 }
 
 /**
