@@ -68,6 +68,7 @@ function HeroCarousel() {
           >
             <Image
               src={img}
+              loading="eager"
               alt={`Product Image ${i}`}
               fill
               objectFit="cover"
