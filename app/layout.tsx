@@ -11,7 +11,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Green Haven | Eco-friendly store",
-  description: "",
+  description:
+    "Green Haven is an eco-friendly store that offers a wide range of products that are good for you and the planet. Shop now and make a difference!",
 };
 
 export default function RootLayout({
