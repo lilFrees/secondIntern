@@ -4,12 +4,14 @@ type State = {
   priceRange: [number, number];
   brands: string[];
 };
+
 type Action = {
   clearPriceRange: () => void;
   updatePriceRange: (value: State["priceRange"]) => void;
   addBrand: (newBrand: string) => void;
   removeBrand: (brand: string) => void;
   clearBrands: () => void;
+  setBrands: (brands: string[]) => void;
 };
 
 export const useFilter = create<State & Action>((set) => ({
@@ -22,4 +24,5 @@ export const useFilter = create<State & Action>((set) => ({
   clearBrands: () => set({ brands: [] }),
   removeBrand: (brand) =>
     set((state) => ({ brands: state.brands.filter((brn) => brn !== brand) })),
+  setBrands: (brands) => set({ brands }),
 }));

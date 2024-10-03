@@ -78,7 +78,7 @@ export async function fetchFilteredProducts(
 
   if (query && query.trim() !== "") {
     supabaseQuery = supabaseQuery.or(
-      `title.ilike.%${query}%,description.ilike.%${query}%`,
+      `title.ilike.%${query}%,description.ilike.%${query}%,brand.ilike.%${query}%,category.ilike.%${query}%`,
     );
   }
 

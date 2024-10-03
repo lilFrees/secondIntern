@@ -1,9 +1,14 @@
 import { Button, Spinner } from "@chakra-ui/react";
 import Link from "next/link";
-import { Suspense } from "react";
-import CategoriesList from "./_features/categories/components/CategoriesList";
-import ProductList from "./_features/product/components/ProductList";
-import HeroCarousel from "./_shared/components/HeroCarousel";
+import { Suspense, lazy } from "react";
+const CategoriesList = lazy(
+  () => import("./_features/categories/components/CategoriesList"),
+);
+const ProductList = lazy(
+  () => import("./_features/product/components/ProductList"),
+);
+
+const HeroCarousel = lazy(() => import("./_shared/components/HeroCarousel"));
 
 export default async function Home() {
   return (

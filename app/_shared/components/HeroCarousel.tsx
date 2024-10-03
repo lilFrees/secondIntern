@@ -69,6 +69,7 @@ function HeroCarousel() {
               src={img}
               alt={`Product Image ${i}`}
               fill
+              loading="lazy"
               className="block h-full w-full object-cover"
               quality={100}
               placeholder="blur"
@@ -77,6 +78,7 @@ function HeroCarousel() {
         ))}
       </SwiperReact>
       <button
+        aria-label="Previous"
         ref={prevRef}
         onClick={handleClickPrev}
         className="absolute left-4 top-1/2 z-10 -translate-y-1/2 transform cursor-pointer select-none"
@@ -84,6 +86,7 @@ function HeroCarousel() {
         <FaCircleChevronLeft className="text-3xl text-white" />
       </button>
       <button
+        aria-label="Next"
         ref={nextRef}
         onClick={handleClickNext}
         className="absolute right-4 top-1/2 z-10 -translate-y-1/2 transform cursor-pointer select-none"

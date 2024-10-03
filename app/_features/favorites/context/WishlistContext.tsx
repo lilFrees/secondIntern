@@ -13,7 +13,7 @@ interface IWishlistContext {
 
 export const WishlistContext = createContext<IWishlistContext | null>(null);
 
-export function WishlistProvider({ children }) {
+export default function WishlistProvider({ children }) {
   const [wishlist, setWishlist] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [idArray, setIdArray] = useState<number[]>([]);

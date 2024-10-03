@@ -1,6 +1,11 @@
 import { notFound } from "next/navigation";
-import SearchProducts from "../_features/search/components/SearchProducts";
-import SearchSidebar from "../_features/search/components/SearchSidebar";
+import { lazy } from "react";
+const SearchProducts = lazy(
+  () => import("../_features/search/components/SearchProducts"),
+);
+const SearchSidebar = lazy(
+  () => import("../_features/search/components/SearchSidebar"),
+);
 
 async function Page({ searchParams }) {
   if (!searchParams.query) {

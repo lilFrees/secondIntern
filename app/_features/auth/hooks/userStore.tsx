@@ -31,7 +31,11 @@ interface UserContextProps {
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+export default function UserProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const userState = useUserStore();
   const { setUser } = userState;
 
@@ -51,7 +55,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
     </UserContext.Provider>
   );
-};
+}
 
 export const useUser = () => {
   const context = useContext(UserContext);

@@ -14,7 +14,7 @@ interface ICartContext {
 
 export const CartContext = createContext<ICartContext | null>(null);
 
-export function CartProvider({ children }) {
+export default function CartProvider({ children }) {
   const [cart, setCart] = useState<ICartItem[]>([]);
   const [idArray, setIdArray] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
