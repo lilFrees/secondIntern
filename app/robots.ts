@@ -1,6 +1,6 @@
 export const runtime = "edge"; // Optional for optimization in App Router
 
-export async function GET() {
+export default async function GET() {
   const robotsTxt = `
     User-agent: *
     Disallow: /admin/
