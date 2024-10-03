@@ -70,11 +70,11 @@ function HeroCarousel() {
               src={img}
               alt={`Product Image ${i}`}
               fill
-              loading="lazy"
-              className="block object-cover"
+              objectFit="cover"
+              objectPosition="center"
+              className="block"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 100vw"
-              quality={100}
-              placeholder="blur"
+              quality={80}
             />
           </SwiperSlide>
         ))}
