@@ -1,4 +1,3 @@
-
 import beauty from "@/public/categories/beauty.jpg";
 import fragrance from "@/public/categories/fragrance.jpg";
 import furniture from "@/public/categories/furniture.jpg";
@@ -55,6 +54,7 @@ const bgImages = [
 
 async function CategoriesList({ preview }: { preview?: boolean }) {
   const categories = await getCategoryList();
+  if (!categories) return null;
   const displayContent = preview ? categories.slice(0, 6) : categories;
 
   return (
