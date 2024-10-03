@@ -5,6 +5,7 @@ import Footer from "./_shared/templates/Footer";
 import { ContextProviders } from "./ContextProviders";
 import React from "react";
 import Navigation from "./_shared/templates/Navigation";
+import { Partytown } from "@builder.io/partytown/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <Partytown debug={true} forward={["dataLayer.push"]} />
+      </head>
       <body className={inter.className + " flex flex-col bg-gray-100"}>
         <React.StrictMode>
           <ContextProviders>

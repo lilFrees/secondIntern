@@ -69,7 +69,7 @@ function HeroCarousel() {
               src={img}
               alt={`Product Image ${i}`}
               fill
-              loading="lazy"
+              loading="eager"
               className="block h-full w-full object-cover"
               quality={100}
               placeholder="blur"
