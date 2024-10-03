@@ -10,10 +10,10 @@ import "swiper/css/pagination";
 import { useRef } from "react";
 import Swiper from "swiper";
 
-import slide1 from "@/public/slider/slide1.jpg";
-import slide2 from "@/public/slider/slide2.jpg";
+import slide1 from "@/public/slider/slide1.webp";
+import slide2 from "@/public/slider/slide2.webp";
 import slide3 from "@/public/slider/slide3.webp";
-import slide4 from "@/public/slider/slide4.jpeg";
+import slide4 from "@/public/slider/slide4.webp";
 import Image from "next/image";
 
 function HeroCarousel() {
