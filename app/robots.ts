@@ -4,7 +4,7 @@ export async function GET() {
   const robotsTxt = `
     User-agent: *
     Disallow: /admin/
-    Sitemap: https://www.yourwebsite.com/sitemap.xml
+    Sitemap: https://green-haven-internship.vercel.app/sitemap.xml
   `;
 
   return new Response(robotsTxt, {
