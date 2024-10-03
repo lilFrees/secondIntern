@@ -14,6 +14,7 @@ import slide1 from "@/public/slider/slide1.webp";
 import slide2 from "@/public/slider/slide2.webp";
 import slide3 from "@/public/slider/slide3.webp";
 import slide4 from "@/public/slider/slide4.webp";
+
 import Image from "next/image";
 
 function HeroCarousel() {
@@ -69,7 +70,7 @@ function HeroCarousel() {
               src={img}
               alt={`Product Image ${i}`}
               fill
-              loading="eager"
+              loading="lazy"
               className="block object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 100vw"
               quality={100}
