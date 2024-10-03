@@ -63,14 +63,15 @@ function HeroCarousel() {
         {images.map((img, i) => (
           <SwiperSlide
             key={i}
-            className="from relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl text-3xl"
+            className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl text-3xl"
           >
             <Image
               src={img}
               alt={`Product Image ${i}`}
               fill
               loading="eager"
-              className="block h-full w-full object-cover"
+              className="block object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 100vw"
               quality={100}
               placeholder="blur"
             />

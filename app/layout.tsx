@@ -23,6 +23,14 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <Partytown debug={true} forward={["dataLayer.push"]} />
+        <link
+          rel="preconnect"
+          href="https://rfxujkcyzpaqbojdznsb.supabase.co"
+        />
+        <link
+          rel="dns-prefetch"
+          href="https://rfxujkcyzpaqbojdznsb.supabase.co"
+        />
       </head>
       <body className={inter.className + " flex flex-col bg-gray-100"}>
         <React.StrictMode>
