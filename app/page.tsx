@@ -1,14 +1,15 @@
 import { Button, Spinner } from "@chakra-ui/react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { Suspense, lazy } from "react";
-const CategoriesList = lazy(
+import { Suspense } from "react";
+const CategoriesList = dynamic(
   () => import("./_features/categories/components/CategoriesList"),
 );
-const ProductList = lazy(
+const ProductList = dynamic(
   () => import("./_features/product/components/ProductList"),
 );
 
-const HeroCarousel = lazy(() => import("./_shared/components/HeroCarousel"));
+const HeroCarousel = dynamic(() => import("./_shared/components/HeroCarousel"));
 
 export default async function Home() {
   return (
