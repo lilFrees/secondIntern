@@ -3,6 +3,7 @@
  */
 
 import { getSupabaseClient } from "../../auth/supabase/client";
+import { ICategory } from "../../categories/interfaces";
 import { IProduct } from "../interfaces/IProduct";
 
 /**
@@ -129,16 +130,7 @@ export async function getProductById(id: number): Promise<IProduct | null> {
  * @returns A promise that resolves to the list of categories.
  * @throws If there is an error fetching the categories.
  */
-export async function getCategoryList(): Promise<
-  | {
-      id: number;
-      name: string;
-      description: string;
-      image: string;
-      slug: string;
-    }[]
-  | null
-> {
+export async function getCategoryList(): Promise<ICategory[] | null> {
   const { data, error } = await supabase
     .from("categories")
     .select("*")

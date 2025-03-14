@@ -25,33 +25,6 @@ import womenwatch from "@/public/categories/womens-watches.jpg";
 import CategoryCard from "./CategoryCard";
 import { getCategoryList } from "../../product/services/product-service";
 
-const bgImages = [
-  beauty,
-  fragrance,
-  furniture,
-  groceries,
-  homedecor,
-  kitchen,
-  laptops,
-  menshirts,
-  menshoes,
-  sport,
-  menwatch,
-  mobile,
-  motor,
-  phones,
-  skincare,
-  sunglasses,
-  tablets,
-  tops,
-  vehicle,
-  womenbags,
-  womendress,
-  jewelry,
-  womenshoes,
-  womenwatch,
-];
-
 async function CategoriesList({ preview }: { preview?: boolean }) {
   const categories = await getCategoryList();
   if (!categories) return null;
@@ -60,7 +33,7 @@ async function CategoriesList({ preview }: { preview?: boolean }) {
   return (
     <div className="grid auto-rows-[200px] grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5">
       {displayContent.map((cat, i) => (
-        <CategoryCard cat={cat} image={bgImages[i]} key={i} />
+        <CategoryCard cat={cat} key={i} />
       ))}
     </div>
   );
